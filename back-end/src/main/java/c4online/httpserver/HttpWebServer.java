@@ -10,6 +10,8 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import c4online.httpserver.auth.AuthManager;
+
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class HttpWebServer {
@@ -26,13 +28,9 @@ public class HttpWebServer {
 		ServletContextHandler servletContext = new ServletContextHandler();
 		servletContext.setContextPath("/");
 		
-		servletContext.addServlet(new ServletHolder(new HttpServlet() {
-			@Override
-			protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-				
-			}
-			
-		 }), "/");
+		// Initialise and attach the user authentication manager
+		AuthManager authManager = new AuthManager(servletContext);
+		authManager.attach();
 		
 		// create a resource handler for serving web pages
 		ResourceHandler resourceHandler = new ResourceHandler();
