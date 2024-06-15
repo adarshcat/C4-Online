@@ -13,28 +13,28 @@ import javax.servlet.http.HttpServletResponse;
 public class WebPage extends HttpServlet{
 	static final String ROOT = "src/main/resources/front-end/";
 	final String htmlFilePath;
-	
+
 	public WebPage(String _htmlFilePath) {
 		htmlFilePath = _htmlFilePath;
 	}
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
 		serveHtml(resp);
 	}
-	
+
 	public void serveHtml(HttpServletResponse resp){
 		String responseHtml = "";
-		
+
 		try (BufferedReader br = Files.newBufferedReader(Paths.get(ROOT + htmlFilePath))) {
 			for (String line; (line = br.readLine()) != null;) {
-	            responseHtml += line+"\n";
-	        }
+				responseHtml += line+"\n";
+			}
 		} catch (Exception e) {
 			System.err.println("Unable to open html file at: " + ROOT+htmlFilePath);
 			e.printStackTrace();
 		}
-		
+
 		resp.setContentType("text/html");
 		resp.setStatus(HttpServletResponse.SC_OK);
 		try {

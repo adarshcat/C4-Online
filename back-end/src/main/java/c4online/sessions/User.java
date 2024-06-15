@@ -7,7 +7,7 @@ public class User {
 	String email;
 	Timestamp lastLogin;
 	Timestamp createdAt;
-	
+
 	int rating;
 	int gamesPlayed;
 	int gamesWon;

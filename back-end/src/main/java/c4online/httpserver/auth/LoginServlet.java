@@ -10,21 +10,21 @@ public class LoginServlet extends WebPage{
 
 	public LoginServlet(String _htmlFilePath) {
 		super(_htmlFilePath);
-		
+
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 		String username = req.getParameter("username");
-    	String password = req.getParameter("password");
-    	String email = req.getParameter("email");
-    	
-    	if (username != null && password != null && email != null) {
-    		// try authenticating the user
-    		
-    		System.out.println(username);
-    		System.out.println(email);
-    		System.out.println(password);
-    	}
+		String password = req.getParameter("password");
+		String email = req.getParameter("email");
+
+		if (username != null && password != null && email != null) {
+			// try authenticating the user
+
+			System.out.println(username);
+			System.out.println(email);
+			System.out.println(password);
+		}
 	}
 }

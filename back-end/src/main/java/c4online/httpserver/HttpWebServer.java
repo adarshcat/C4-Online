@@ -17,32 +17,31 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 public class HttpWebServer {
 	private final int PORT;
 	Server server;
-	
-	@SuppressWarnings("serial")
+
 	public HttpWebServer(int _port) {
 		PORT = _port;
-		
+
 		server = new Server(PORT);
-		
+
 		// create and attach servlets for handling http requests
 		ServletContextHandler servletContext = new ServletContextHandler();
 		servletContext.setContextPath("/");
-		
+
 		// Initialise and attach the user authentication manager
 		AuthManager authManager = new AuthManager(servletContext);
 		authManager.attach();
-		
+
 		// create a resource handler for serving web pages
 		ResourceHandler resourceHandler = new ResourceHandler();
 		resourceHandler.setDirectoriesListed(false);
 		resourceHandler.setResourceBase("src/main/resources/front-end");
-		
+
 		ContextHandler resourceContext = new ContextHandler();
 		resourceContext.setHandler(resourceHandler);
-		
+
 		server.setHandler(new ContextHandlerCollection(servletContext, resourceContext));
 	}
-	
+
 	public void run() throws Exception {
 		server.start();
 		server.join();
