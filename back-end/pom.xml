@@ -5,4 +5,20 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>C4Online</name>
   <description>Connect 4 online</description>
+  
+  <dependencies>
+	
+	<dependency>
+	   	<groupId>org.eclipse.jetty</groupId>
+	    <artifactId>jetty-server</artifactId>
+	    <version>12.0.10</version>
+  	</dependency>
+  	
+  	<dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-servlet</artifactId>
+        <version>11.0.21</version>
+    </dependency>
+    
+  </dependencies>
 </project>
