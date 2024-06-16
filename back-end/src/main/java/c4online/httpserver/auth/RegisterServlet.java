@@ -1,5 +1,7 @@
 package c4online.httpserver.auth;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,7 +12,7 @@ import c4online.security.Security;
 @SuppressWarnings("serial")
 public class RegisterServlet extends WebPage{
 	public RegisterServlet(String _htmlFilePath) {
-		super(_htmlFilePath);
+		super(_htmlFilePath, WebPage.auth_type.AUTH_ONLY_NO_SESSION);
 
 	}
 
@@ -27,13 +29,31 @@ public class RegisterServlet extends WebPage{
 			
 			if (doesUserExist || doesEmailExist) {
 				// email or username already exist, abort the registration
-				System.out.println("Username/Email already present");
+				try {
+					resp.sendRedirect(AuthManager.registerHandler + "?status=present");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				return;
 			}
 			
 			String passwordHash = Security.passToHash(password);
 			
-			System.out.println(DatabaseManager.userdb.addAccount(username, email, passwordHash));
+			boolean didSucceed = DatabaseManager.userdb.addAccount(username, email, passwordHash);
+			
+			if (didSucceed) {
+				try {
+					resp.sendRedirect(AuthManager.loginHandler + "?status=registered");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					resp.sendRedirect(AuthManager.registerHandler + "?status=failed");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

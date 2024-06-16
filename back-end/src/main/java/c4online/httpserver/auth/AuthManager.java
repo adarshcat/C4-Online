@@ -4,9 +4,12 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 public class AuthManager {
+	final static String loginHandler = "/login";
+	final static String registerHandler = "/register";
+
 	final String loginHtmlPath = "auth/login/login.html";
 	final String registerHtmlPath = "auth/register/register.html";
-
+	
 	ServletContextHandler servletContext;
 
 	public AuthManager(ServletContextHandler _servletContext) {
@@ -17,7 +20,7 @@ public class AuthManager {
 		LoginServlet loginServlet = new LoginServlet(loginHtmlPath);
 		RegisterServlet registerServlet = new RegisterServlet(registerHtmlPath);
 
-		servletContext.addServlet(new ServletHolder(loginServlet), "/login");
-		servletContext.addServlet(new ServletHolder(registerServlet), "/register");
+		servletContext.addServlet(new ServletHolder(loginServlet), loginHandler);
+		servletContext.addServlet(new ServletHolder(registerServlet), registerHandler);
 	}
 }
