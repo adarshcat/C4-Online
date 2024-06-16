@@ -5,7 +5,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 public class AuthManager {
 	final String loginHtmlPath = "auth/login/login.html";
-	final String registerHtmlPath = "";
+	final String registerHtmlPath = "auth/register/register.html";
 
 	ServletContextHandler servletContext;
 
@@ -15,7 +15,9 @@ public class AuthManager {
 
 	public void attach() {
 		LoginServlet loginServlet = new LoginServlet(loginHtmlPath);
+		RegisterServlet registerServlet = new RegisterServlet(registerHtmlPath);
 
 		servletContext.addServlet(new ServletHolder(loginServlet), "/login");
+		servletContext.addServlet(new ServletHolder(registerServlet), "/register");
 	}
 }

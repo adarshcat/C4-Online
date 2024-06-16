@@ -23,7 +23,6 @@ public class LoginServlet extends WebPage{
 		if (usernameOrEmail != null && password != null) {
 			// try authenticating the user
 			String passwordHash = Security.passToHash(password);
-			
 			int userId = DatabaseManager.userdb.validateAccount(usernameOrEmail, passwordHash);
 			
 			System.out.println(passwordHash);

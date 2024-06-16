@@ -14,7 +14,29 @@ public class UserDB {
 	public UserDB(Connection _conn) {
 		conn = _conn;
 	}
-
+	
+	// functions for updating the tables
+	public boolean addAccount(String username, String email, String passwordHash) {
+		try {
+		String sqlQuery = "INSERT INTO users(username, email, password_hash) values(?, ?, ?)";
+		
+		PreparedStatement stmt = conn.prepareStatement(sqlQuery);
+		stmt.setString(1, username);
+		stmt.setString(2, email);
+		stmt.setString(3, passwordHash);
+		
+		int rowUpdated = stmt.executeUpdate();
+		
+		if (rowUpdated != 0) return true;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	// functions for validations and queries
 	public int validateAccount(String usernameOrEmail, String passHash) {
 		try {
 			String sqlQuery = "SELECT * FROM "+userTable+" WHERE (username = ? or email = ?) and password_hash = ?";
@@ -38,5 +60,55 @@ public class UserDB {
 		}
 		
 		return -1;
+	}
+	
+	public boolean doesUserExist(String username) {
+		try {
+			String sqlQuery = "SELECT * FROM "+userTable+" WHERE username = ?";
+			
+			PreparedStatement stmt = conn.prepareStatement(sqlQuery);
+			stmt.setString(1, username);
+			
+			ResultSet rset = stmt.executeQuery();
+			int userId = -1;
+			
+			while(rset.next()) {
+				userId = rset.getInt("id");
+			}
+			
+			if (userId != -1)
+				return true;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean doesEmailExist(String email) {
+		try {
+			String sqlQuery = "SELECT * FROM "+userTable+" WHERE email = ?";
+			
+			PreparedStatement stmt = conn.prepareStatement(sqlQuery);
+			stmt.setString(1, email);
+			
+			ResultSet rset = stmt.executeQuery();
+			int userId = -1;
+			
+			while(rset.next()) {
+				userId = rset.getInt("id");
+			}
+			
+			if (userId != -1)
+				return true;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return true;
+		}
+		
+		return false;
 	}
 }
