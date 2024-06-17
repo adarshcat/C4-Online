@@ -53,8 +53,8 @@ public class HttpWebServer {
 		authManager.attach();
 		
 		// Initialise and attach the game pages manager
-		ServiceManager gamePagesManager = new ServiceManager(servletContext);
-		gamePagesManager.attach();
+		ServiceManager serviceManager = new ServiceManager(servletContext);
+		serviceManager.attach();
 	}
 
 	public void run() throws Exception {

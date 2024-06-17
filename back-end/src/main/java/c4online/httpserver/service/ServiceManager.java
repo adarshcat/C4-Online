@@ -6,6 +6,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 public class ServiceManager {
 	public final static String homeHandler = "/home";
 	public final static String playHandler = "/play";
+	public final static String userInfoHandler = "/userinfo";
 
 	final String homeHtmlPath = "service/home/home.html";
 	final String playHtmlPath = "";
@@ -18,7 +19,9 @@ public class ServiceManager {
 
 	public void attach() {
 		HomeServlet homeServlet = new HomeServlet(homeHtmlPath);
+		UserInfoServlet userInfoServlet = new UserInfoServlet();
 		
 		servletContext.addServlet(new ServletHolder(homeServlet), homeHandler);
+		servletContext.addServlet(new ServletHolder(userInfoServlet), userInfoHandler);
 	}
 }
