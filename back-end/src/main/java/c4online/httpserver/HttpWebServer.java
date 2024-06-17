@@ -13,12 +13,18 @@ import c4online.httpserver.auth.AuthManager;
 import c4online.httpserver.service.ServiceManager;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class HttpWebServer {
 	private final int PORT;
 	
 	Server server;
 
+	@SuppressWarnings("serial")
 	public HttpWebServer(int _port) {
 		PORT = _port;
 
@@ -27,6 +33,16 @@ public class HttpWebServer {
 		// create and attach servlets for handling http requests
 		ServletContextHandler servletContext = new ServletContextHandler();
 		servletContext.setContextPath("/");
+		servletContext.addServlet(new ServletHolder(new HttpServlet() {
+			@Override
+			protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+				try {
+					resp.sendRedirect(ServiceManager.homeHandler);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}), "");
 
 		
 		// convert any symlink or aliases to the front-end directory to a real path
