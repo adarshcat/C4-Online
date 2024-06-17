@@ -35,6 +35,9 @@ public class LoginServlet extends WebPage{
 				User user = DatabaseManager.userdb.getUserDataById(userId);
 				String sessionId = SessionManager.createSession(user);
 				
+				// Update last login for the user
+				DatabaseManager.userdb.updateLastLogin(userId);
+				
 				// store the create session id as a cookie in the client's browser
 				Cookie loginCookie = new Cookie(SessionManager.sessionCookieId, sessionId);
 				loginCookie.setMaxAge(SessionManager.sessionAge);

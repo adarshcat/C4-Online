@@ -6,7 +6,7 @@ import c4online.security.Security;
 
 public class SessionManager {
 	public static final String sessionCookieId = "sessionId";
-	public static final int sessionAge = 60 * 60;
+	public static final int sessionAge = 60 * 60 * 24;
 
 	private static ConcurrentHashMap<String, User> sessionMap;
 
@@ -17,9 +17,26 @@ public class SessionManager {
 	// session update related functions
 	public static String createSession(User user) {
 		String sessionId = Security.generateSessionId();
+		
+		// delete any previous entry with the same user id
+		deleteSessionByUserId(user.id);
+		// add the new session into the map
 		sessionMap.put(sessionId, user);
 
 		return sessionId;
+	}
+	
+	public static boolean deleteSessionByUserId(int userId) {
+		boolean somethingRemoved = false;
+		
+		for (ConcurrentHashMap.Entry<String, User> pair : sessionMap.entrySet()) {
+			if (pair.getValue().id == userId) {
+				User removed = sessionMap.remove(pair.getKey());
+				if (removed != null) somethingRemoved = true;
+			}
+		}
+		
+		return somethingRemoved;
 	}
 	
 	

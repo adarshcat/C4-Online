@@ -1,6 +1,9 @@
 package c4online.httpserver;
 
-import org.eclipse.jetty.server.SameFileAliasChecker;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -23,16 +26,25 @@ public class HttpWebServer {
 		ServletContextHandler servletContext = new ServletContextHandler();
 		servletContext.setContextPath("/");
 
+		
+		// convert any symlink or aliases to the front-end directory to a real path
+		Path webRootPath = null;
+		try {
+			webRootPath = new File("src/main/resources/front-end").toPath().toRealPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		// create a resource handler for serving web pages
 		ResourceHandler resourceHandler = new ResourceHandler();
 		resourceHandler.setDirectoriesListed(true);
-		resourceHandler.setResourceBase("src/main/resources/front-end");
+		resourceHandler.setResourceBase(webRootPath.toString());
 		
 		ContextHandler resourceContext = new ContextHandler("/front-end");
 		resourceContext.setHandler(resourceHandler);
-		resourceContext.addAliasCheck(new SameFileAliasChecker());
 
 		server.setHandler(new HandlerList(resourceContext, servletContext));
+		
 		
 		// Initialise and attach the user authentication manager
 		AuthManager authManager = new AuthManager(servletContext);

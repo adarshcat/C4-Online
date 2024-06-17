@@ -17,10 +17,10 @@ public class UserDB {
 		conn = _conn;
 	}
 	
-	// functions for updating the tables
+	// functions for updating the tables/entries
 	public boolean addAccount(String username, String email, String passwordHash) {
 		try {
-		String sqlQuery = "INSERT INTO users(username, email, password_hash) values(?, ?, ?)";
+		String sqlQuery = "INSERT INTO "+userTable+"(username, email, password_hash) values(?, ?, ?)";
 		
 		PreparedStatement stmt = conn.prepareStatement(sqlQuery);
 		stmt.setString(1, username);
@@ -30,6 +30,23 @@ public class UserDB {
 		int rowUpdated = stmt.executeUpdate();
 		
 		if (rowUpdated != 0) return true;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean updateLastLogin(int userId) {
+		try {
+			String sqlQuery = "UPDATE "+userTable+" SET last_login = CURRENT_TIMESTAMP where id = ?";
+			
+			PreparedStatement stmt = conn.prepareStatement(sqlQuery);
+			stmt.setInt(1, userId);
+						
+			int rowUpdated = stmt.executeUpdate();
+			
+			if (rowUpdated != 0) return true;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
