@@ -7,12 +7,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import c4online.db.DatabaseManager;
 import c4online.httpserver.WebPage;
+import c4online.httpserver.service.ServiceManager;
 import c4online.security.Security;
 
 @SuppressWarnings("serial")
 public class RegisterServlet extends WebPage{
 	public RegisterServlet(String _htmlFilePath) {
-		super(_htmlFilePath, WebPage.auth_type.AUTH_ONLY_NO_SESSION);
+		super(_htmlFilePath, WebPage.auth_type.AUTH_ONLY_NO_SESSION, ServiceManager.homeHandler);
 
 	}
 

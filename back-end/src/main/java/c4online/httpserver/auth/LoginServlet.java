@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import c4online.db.DatabaseManager;
 import c4online.httpserver.WebPage;
+import c4online.httpserver.service.ServiceManager;
 import c4online.security.Security;
 import c4online.sessions.SessionManager;
 import c4online.sessions.User;
@@ -16,7 +17,7 @@ import c4online.sessions.User;
 public class LoginServlet extends WebPage{
 
 	public LoginServlet(String _htmlFilePath) {
-		super(_htmlFilePath, WebPage.auth_type.AUTH_ONLY_NO_SESSION);
+		super(_htmlFilePath, WebPage.auth_type.AUTH_ONLY_NO_SESSION, ServiceManager.homeHandler);
 
 	}
 
@@ -42,6 +43,13 @@ public class LoginServlet extends WebPage{
 				Cookie loginCookie = new Cookie(SessionManager.sessionCookieId, sessionId);
 				loginCookie.setMaxAge(SessionManager.sessionAge);
 				resp.addCookie(loginCookie);
+				
+				// After a successful login, redirect to the home page
+				try {
+					resp.sendRedirect(ServiceManager.homeHandler);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			} else {
 				// login failed because username/Email or password didn't match
 				try {

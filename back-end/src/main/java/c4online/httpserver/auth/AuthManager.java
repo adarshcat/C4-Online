@@ -4,8 +4,8 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 public class AuthManager {
-	final static String loginHandler = "/login";
-	final static String registerHandler = "/register";
+	public final static String loginHandler = "/login";
+	public final static String registerHandler = "/register";
 
 	final String loginHtmlPath = "auth/login/login.html";
 	final String registerHtmlPath = "auth/register/register.html";

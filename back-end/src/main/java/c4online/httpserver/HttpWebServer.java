@@ -10,11 +10,13 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 
 import c4online.httpserver.auth.AuthManager;
+import c4online.httpserver.service.ServiceManager;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class HttpWebServer {
 	private final int PORT;
+	
 	Server server;
 
 	public HttpWebServer(int _port) {
@@ -49,6 +51,10 @@ public class HttpWebServer {
 		// Initialise and attach the user authentication manager
 		AuthManager authManager = new AuthManager(servletContext);
 		authManager.attach();
+		
+		// Initialise and attach the game pages manager
+		ServiceManager gamePagesManager = new ServiceManager(servletContext);
+		gamePagesManager.attach();
 	}
 
 	public void run() throws Exception {
