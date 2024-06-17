@@ -1,10 +1,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.whirlwind.c4online</groupId>
-  <artifactId>c4online</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>C4Online</name>
-  <description>Connect 4 online</description>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.whirlwind.c4online</groupId>
+	<artifactId>c4online</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>C4Online</name>
+	<description>Connect 4 online</description>
+  
+	<build>
+	<plugins>
+	     <plugin>
+	        <!-- Build an executable JAR -->
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-jar-plugin</artifactId>
+	        <version>3.4.0</version>
+	        <configuration>
+	            <archive>
+	                <manifest>
+	                    <!-- <addClasspath>true</addClasspath> -->
+	                    <mainClass>c4online.C4OnlineApplication</mainClass>
+	                </manifest>
+	            </archive>
+	        </configuration>
+	    </plugin>
+	  </plugins>
+	</build>
+
   
   <dependencies>
 	
