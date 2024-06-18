@@ -2,6 +2,7 @@ package c4online.sessions;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import c4online.db.DatabaseManager;
 import c4online.security.Security;
 
 public class SessionManager {
@@ -12,6 +13,12 @@ public class SessionManager {
 
 	public static void initialise() {
 		sessionMap = new ConcurrentHashMap<String, User>();
+		
+		// DEBUG - remove this block of code later
+			String debugSession = "HrT2-MgHw4zUGitZMW765Saeyat-9m9julumb6msW6Y";
+			User debugUser = DatabaseManager.userdb.getUserDataById(2);
+			sessionMap.put(debugSession, debugUser);
+		// ----------------------------------------
 	}
 	
 	// session update related functions

@@ -1,6 +1,7 @@
 package c4online;
 
 import c4online.db.DatabaseManager;
+import c4online.game.GameManager;
 import c4online.httpserver.HttpWebServer;
 import c4online.security.Security;
 import c4online.sessions.SessionManager;
@@ -11,6 +12,7 @@ public class C4OnlineApplication {
 		DatabaseManager.initialise(); // initialise the database
 		SessionManager.initialise(); // initialise session manager
 		Security.initialise(); // initialise the security class
+		GameManager.initialise(); // initialise the game manager
 		
 		HttpWebServer httpWebServer = new HttpWebServer(80);
 

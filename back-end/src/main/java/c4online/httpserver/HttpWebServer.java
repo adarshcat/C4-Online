@@ -11,9 +11,12 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 
 import c4online.httpserver.auth.AuthManager;
 import c4online.httpserver.service.ServiceManager;
+import c4online.websocket.GameWebSocket;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.websocket.server.WebSocketHandler;
+import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +46,19 @@ public class HttpWebServer {
 				}
 			}
 		}), "");
-
+		
+		
+		// Setup WebSocket handler
+        WebSocketHandler wsHandler = new WebSocketHandler() {
+            @Override
+            public void configure(WebSocketServletFactory factory) {
+                factory.register(GameWebSocket.class);
+            }
+        };
+        ServletContextHandler wsContext = new ServletContextHandler();
+        wsContext.setContextPath("/");
+        wsContext.setHandler(wsHandler);
+        
 		
 		// convert any symlink or aliases to the front-end directory to a real path
 		Path webRootPath = null;
@@ -61,7 +76,9 @@ public class HttpWebServer {
 		ContextHandler resourceContext = new ContextHandler("/front-end");
 		resourceContext.setHandler(resourceHandler);
 
-		server.setHandler(new HandlerList(resourceContext, servletContext));
+		
+		// attach all the handlers
+		server.setHandler(new HandlerList(wsContext, resourceContext, servletContext));
 		
 		
 		// Initialise and attach the user authentication manager

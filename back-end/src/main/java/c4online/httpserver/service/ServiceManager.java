@@ -9,7 +9,7 @@ public class ServiceManager {
 	public final static String userInfoHandler = "/userinfo";
 
 	final String homeHtmlPath = "service/home/home.html";
-	final String playHtmlPath = "";
+	final String playHtmlPath = "service/play/play.html";
 	
 	ServletContextHandler servletContext;
 
@@ -19,9 +19,13 @@ public class ServiceManager {
 
 	public void attach() {
 		HomeServlet homeServlet = new HomeServlet(homeHtmlPath);
+		PlayServlet playServlet = new PlayServlet(playHtmlPath);
+		
 		UserInfoServlet userInfoServlet = new UserInfoServlet();
 		
 		servletContext.addServlet(new ServletHolder(homeServlet), homeHandler);
+		servletContext.addServlet(new ServletHolder(playServlet), playHandler);
+		
 		servletContext.addServlet(new ServletHolder(userInfoServlet), userInfoHandler);
 	}
 }
