@@ -29,7 +29,7 @@ class Matchmaker {
 	
 	// functions related to updating matchmaking
 	void queuePlayer(Player newPlayer) {
-		// add the user into the queue and try matchmaking
+		// add the user into the queue
 		players.add(newPlayer);
 	}
 	

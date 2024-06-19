@@ -21,7 +21,7 @@ public class GameWebSocket {
 	String sessionId;
 	Player player;
 
-	GameInstance gameInstance; // This caches of the current associated game instance this session is a part of
+	GameInstance gameInstance; // This caches the current associated game instance this session is a part of
 
 	private void startNewSession() {
 		GameManager.addNewPlayer(player);
@@ -40,8 +40,6 @@ public class GameWebSocket {
 		player = oldPlayer;
 
 		System.out.println("Connecting " + player.username + " to a previous game session");
-
-		// TODO: Make sure to send the necessary data to the newly logged in client about the previous session's state
 	}
 	
 

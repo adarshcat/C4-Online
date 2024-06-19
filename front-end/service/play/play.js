@@ -21,6 +21,7 @@ function onPlayBtnClick(){
     
     socket.onmessage = function(event) {
         console.log('Received from server:', event.data);
+        if (event.data.startsWith("board ")) parseBoard(event.data.substring(6));
     };
 }
 

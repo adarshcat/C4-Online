@@ -8,6 +8,8 @@ public class Player extends User{
 	public Session websocketSession = null;
 	private long lastPing = System.currentTimeMillis();
 	
+	public enum type{PLAYER1, PLAYER2, NONE};
+	
 	public Player(User user) {
 		id = user.id;
 		username = user.username;

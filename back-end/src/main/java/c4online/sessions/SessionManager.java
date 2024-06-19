@@ -18,6 +18,10 @@ public class SessionManager {
 			String debugSession = "uVfG_glv5Trk-tr5VQY4ha73PhyyUY0Mon4PQQAkCl0";
 			User debugUser = DatabaseManager.userdb.getUserDataById(2);
 			sessionMap.put(debugSession, debugUser);
+			
+			String debugSession2 = "cmtsuIo4gK9qlrgEWZuj6KRUd8jApooEltHwxVQShbw";
+			User debugUser2 = DatabaseManager.userdb.getUserDataById(4);
+			sessionMap.put(debugSession2, debugUser2);
 		// ----------------------------------------
 	}
 	
