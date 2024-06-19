@@ -6,6 +6,7 @@ import c4online.sessions.User;
 
 public class Player extends User{
 	public Session websocketSession = null;
+	private long lastPing = System.currentTimeMillis();
 	
 	public Player(User user) {
 		id = user.id;
@@ -19,5 +20,13 @@ public class Player extends User{
 		gamesWon = user.gamesWon;
 		gamesLost = user.gamesLost;
 		gamesDraw = user.gamesDraw;
+	}
+	
+	public void ping() {
+		lastPing = System.currentTimeMillis();
+	}
+	
+	public long timeSinceLastPing() {
+		return System.currentTimeMillis() - lastPing;
 	}
 }

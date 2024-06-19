@@ -11,8 +11,14 @@ class Matchmaker {
 		players = new CopyOnWriteArrayList<Player>();
 	}
 	
+	// runs a periodic matchmaking task which returns a game instance when a match is made
+	GameInstance runTask() {
+		return matchmake();
+	}
+	
+	
 	// functions related to querying
-	boolean isUserInQueue(int playerId) {
+	boolean isPlayerInQueue(int playerId) {
 		for (Player player : players) {
 			if (player.id == playerId) return true;
 		}
@@ -20,12 +26,11 @@ class Matchmaker {
 		return false;
 	}
 	
+	
 	// functions related to updating matchmaking
-	GameInstance queueUser(Player newPlayer) {
+	void queuePlayer(Player newPlayer) {
 		// add the user into the queue and try matchmaking
 		players.add(newPlayer);
-		
-		return matchmake();
 	}
 	
 	Player updateSessionIfPresent(int playerId, Session newSession) {

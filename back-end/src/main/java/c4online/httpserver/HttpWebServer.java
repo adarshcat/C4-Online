@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class HttpWebServer {
 	private final int PORT;
-	
+
 	Server server;
 
 	@SuppressWarnings("serial")
@@ -46,20 +46,20 @@ public class HttpWebServer {
 				}
 			}
 		}), "");
-		
-		
+
+
 		// Setup WebSocket handler
-        WebSocketHandler wsHandler = new WebSocketHandler() {
-            @Override
-            public void configure(WebSocketServletFactory factory) {
-                factory.register(GameWebSocket.class);
-            }
-        };
-        ServletContextHandler wsContext = new ServletContextHandler();
-        wsContext.setContextPath("/");
-        wsContext.setHandler(wsHandler);
-        
-		
+		WebSocketHandler wsHandler = new WebSocketHandler() {
+			@Override
+			public void configure(WebSocketServletFactory factory) {
+				factory.register(GameWebSocket.class);
+			}
+		};
+		ServletContextHandler wsContext = new ServletContextHandler();
+		wsContext.setContextPath("/");
+		wsContext.setHandler(wsHandler);
+
+
 		// convert any symlink or aliases to the front-end directory to a real path
 		Path webRootPath = null;
 		try {
@@ -67,24 +67,24 @@ public class HttpWebServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		// create a resource handler for serving web pages
 		ResourceHandler resourceHandler = new ResourceHandler();
 		resourceHandler.setDirectoriesListed(true);
 		resourceHandler.setResourceBase(webRootPath.toString());
-		
+
 		ContextHandler resourceContext = new ContextHandler("/front-end");
 		resourceContext.setHandler(resourceHandler);
 
-		
+
 		// attach all the handlers
 		server.setHandler(new HandlerList(wsContext, resourceContext, servletContext));
-		
-		
+
+
 		// Initialise and attach the user authentication manager
 		AuthManager authManager = new AuthManager(servletContext);
 		authManager.attach();
-		
+
 		// Initialise and attach the game pages manager
 		ServiceManager serviceManager = new ServiceManager(servletContext);
 		serviceManager.attach();

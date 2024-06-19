@@ -1,39 +1,50 @@
 package c4online.game;
 
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class GameManager {
 	private static CopyOnWriteArrayList<GameInstance> gameInstances;
 	private static Matchmaker matchmaker;
+	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	
-	public enum user_state{NONE, MATCHMAKING, IN_GAME};
+	public enum player_state{NONE, MATCHMAKING, IN_GAME};
 	
 	public static void initialise() {
 		matchmaker = new Matchmaker();
 		gameInstances = new CopyOnWriteArrayList<GameInstance>();
+		startGameTask();
 	}
 	
+	private static void startGameTask() {
+		GameTask gameTask = new GameTask(gameInstances, matchmaker);
+		// executes the run function in teh gameTask object every 2 seconds
+		scheduler.scheduleAtFixedRate(gameTask, 0, 2, TimeUnit.SECONDS);
+	}
+	
+	// game management realted functions
 	public static void terminateGame(GameInstance gameInst) {
 		// game termination procedure: close player1's connection, player2's connection and then remove gameInstance
 		gameInst.player1.websocketSession.close();
 		gameInst.player2.websocketSession.close();
 		gameInstances.remove(gameInst);
 	}
+	// ---------------------------------
 	
-	public static void addNewUser(Player newPlayer) {
-		GameInstance gameInst = matchmaker.queueUser(newPlayer);
-		if (gameInst != null) {
-			// A match is created and a new game instance is returned as a result
-			gameInstances.add(gameInst);
-			System.out.println("A match is made! " + gameInst.player1.username + " and " + gameInst.player2.username);
-		}
+	
+	// user management related functions
+	public static void addNewPlayer(Player newPlayer) {
+		matchmaker.queuePlayer(newPlayer);
+		System.out.println("Added "+newPlayer.username+" to matchmaking queue");
 	}
 	
-	public static Player connectPreviousUser(Player player) {
+	public static Player connectPreviousPlayer(Player player) {
 		Player oldPlayer = matchmaker.updateSessionIfPresent(player.id, player.websocketSession);
 		if (oldPlayer == null) {
 			for (GameInstance ginst : gameInstances) {
-				oldPlayer = ginst.updateIfUserPresent(player.id, player.websocketSession);
+				oldPlayer = ginst.updateSessionIfPresent(player.id, player.websocketSession);
 				if (oldPlayer != null) return oldPlayer;
 			}
 		}
@@ -41,16 +52,25 @@ public class GameManager {
 		return oldPlayer;
 	}
 	
-	public static user_state doesConnectionExist(int userId) {
-		if (matchmaker.isUserInQueue(userId)) {
-			return user_state.MATCHMAKING;
+	public static player_state doesConnectionExist(int playerId) {
+		if (matchmaker.isPlayerInQueue(playerId)) {
+			return player_state.MATCHMAKING;
 		} else {
 			for (GameInstance ginst : gameInstances) {
-				if (ginst.isUserInThisGame(userId))
-					return user_state.IN_GAME;
+				if (ginst.isPlayerInThisGame(playerId) != null)
+					return player_state.IN_GAME;
 			}
 		}
 		
-		return user_state.NONE;
+		return player_state.NONE;
 	}
+	
+	public static GameInstance forwardPlayerMessage(int playerId, String message) {
+		for (GameInstance ginst : gameInstances) {
+			if (ginst.parseMessage(playerId, message)) return ginst;
+		}
+		
+		return null;
+	}
+	// ----------------------------------
 }
