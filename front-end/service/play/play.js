@@ -20,22 +20,53 @@ function onPlayBtnClick(){
     };
     
     socket.onmessage = function(event) {
-        console.log('Received from server:', event.data);
-        if (event.data.startsWith("board ")) parseBoard(event.data.substring(6));
+        let jsonPacket = JSON.parse(event.data);
+        let method = jsonPacket.method;
+        let param = jsonPacket.param;
+
+        console.log('method:', method, "  param:", param);
+
+        parseMessageFromServer(method, param)
     };
 }
 
+function parseMessageFromServer(method, param){
+    if (method == "match"){
+        let playerData = JSON.parse(param);
+        matchStarted(playerData);
+    }
+    else if (method == "board"){
+        parseBoard(param);
+    }
+}
+
+function matchStarted(otherPlayer){
+
+}
+
+// functions for sending message over to the server
+function sendPlayCommand(col){
+    let packet = {method: "play", param: col};
+    console.log(JSON.stringify(packet));
+    socket.send(JSON.stringify(packet));
+}
+
+
+// function for send periodic pings to the server
 function startPing(){
     pingInterval = setInterval(() => {
-        socket.send("ping");
+        socket.send(`{"method": "ping", "param": ""}`);
     }, 2000); // Send a ping every 2 seconds
 }
 
 function stopPing(){
     clearInterval(pingInterval);
 }
+// ----------------------------------------------
 
+
+// button click callbacks
 function onSendBtnClick(){
     if (socket == null) return;
-    socket.send("hello");
+    socket.send(`{"method": "hello", "param": ""}`);
 }

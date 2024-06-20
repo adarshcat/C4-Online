@@ -11,8 +11,8 @@ class Connect4Session {
 		clearBoard();
 	}
 	
-	boolean playPosition(int column) {
-		if (column < 0 || column >= WIDTH) return false;
+	boolean playPosition(int column, Player.type playingPlayer) {
+		if (column < 0 || column >= WIDTH || playingPlayer == Player.type.NONE || playingPlayer != turn) return false;
 		boolean played = false;
 		
 		for (int j=HEIGHT-1; j>=0; j--) {

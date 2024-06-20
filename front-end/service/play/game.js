@@ -55,7 +55,7 @@ function parseBoard(boardStateEncoded){
 
 function mousePressed(){
     let col = floor(mouseX / rad);
-    if (col < WIDTH && socket != null){
-        socket.send("play "+col);
+    if (col >= 0 && col < WIDTH && socket != null){
+        sendPlayCommand(col);
     }
 }

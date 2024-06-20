@@ -4,6 +4,8 @@ import org.eclipse.jetty.websocket.api.Session;
 
 import c4online.websocket.WebSocketComm;
 
+import java.util.HashMap;
+
 public class GameInstance {
 	public final static int GAME_ABANDONED_TIME = 60 * 1000; // time for game to be considered abandoned by a player in millis
 
@@ -19,8 +21,8 @@ public class GameInstance {
 
 	void initialise() {
 		try {
-			this.player1.websocketSession.getRemote().sendString("Match is created with: " + player2.username);
-			this.player2.websocketSession.getRemote().sendString("Match is created with: " + player1.username);
+			this.player1.websocketSession.getRemote().sendString(WebSocketComm.constructJSONPacket(WebSocketComm.match, player2.parseToJSON()));
+			this.player2.websocketSession.getRemote().sendString(WebSocketComm.constructJSONPacket(WebSocketComm.match, player1.parseToJSON()));
 
 			System.out.println("A match is made! " + player1.username + " and " + player2.username);
 		} catch (Exception e) {
@@ -37,22 +39,26 @@ public class GameInstance {
 	}
 
 	public boolean parseMessage(int playerId, String message) {
-		// TODO: refactor this so that it uses json to receive messages probably use handler objects?
 		Player player = isPlayerInThisGame(playerId);
-
 		if (player == null) return false;
 
-		if (message.equals(WebSocketComm.ping)) {
+		HashMap<String, String> jsonData = WebSocketComm.parseJSONPacket(message);
+		if (jsonData == null){
+			System.out.println("Invalid data");
+			return false;
+		}
+
+		String method = jsonData.get(WebSocketComm.METHOD_FIELD_ID);
+		String param = jsonData.get(WebSocketComm.PARAM_FIELD_ID);
+
+		if (method.equals(WebSocketComm.ping)) {
 			player.ping();
 			return true; // TODO: REMOVE THIS IN THE FUTURE RIGHT NOW I ADDED THIS TO AVOID ANNOYING PING FLOODING THE STDOUT
-		} else{
-			String[] msgComponents = message.split(" ");
-			if (msgComponents.length == 2 && msgComponents[0].equals(WebSocketComm.play)) {
-				try {
-					gameSession.playPosition(Integer.parseInt(msgComponents[1]));
-					sendBoardDataToPlayers();
-				} catch (Exception e) {}
-			}
+		} else if (method.equals(WebSocketComm.play)){
+			try {
+				gameSession.playPosition(Integer.parseInt(param), getPlayerEnumFromId(playerId));
+				sendBoardDataToPlayers();
+			} catch (Exception ignored) {}
 		}
 
 		System.out.println("Parsing message: " + message + " from: " + player.username);
@@ -60,24 +66,34 @@ public class GameInstance {
 		return true;
 	}
 
+
+	// functions for sending data over to the players via websocket
 	private void sendBoardDataToPlayers() {
 		String data = WebSocketComm.encodeBoardToString(gameSession.board);
 		broadcastMessage(data);
 	}
 
 	private void broadcastMessage(String msg) {
+		sendToPlayer1(msg);
+		sendToPlayer2(msg);
+	}
+
+	private void sendToPlayer1(String msg){
 		try {
 			player1.websocketSession.getRemote().sendString(msg);
-		} catch (Exception e) {}
+		} catch (Exception ignored) {}
+	}
+
+	private void sendToPlayer2(String msg){
 		try {
 			player2.websocketSession.getRemote().sendString(msg);
-		} catch (Exception e) {}
+		} catch (Exception ignored) {}
 	}
-	
 	
 	private void sendGameStateToReturningPlayer(Player returningPlayer) {
 		sendBoardDataToPlayers();
 	}
+	// --------------------------------------------------------------
 
 
 	// game termination functions
@@ -123,6 +139,13 @@ public class GameInstance {
 		else if (player2.id == playerId) return player2;
 
 		return null;
+	}
+
+	Player.type getPlayerEnumFromId(int playerId){
+		if (player1.id == playerId) return Player.type.PLAYER1;
+		else if (player2.id == playerId) return Player.type.PLAYER2;
+
+		return Player.type.NONE;
 	}
 	// --------------------------
 }
