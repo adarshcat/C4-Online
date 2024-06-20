@@ -13,16 +13,18 @@ class Connect4Session {
 	
 	boolean playPosition(int column) {
 		if (column < 0 || column >= WIDTH) return false;
+		boolean played = false;
 		
 		for (int j=HEIGHT-1; j>=0; j--) {
 			if (board[column][j] == Player.type.NONE) {
 				board[column][j] = turn;
+				played = true;
 				switchTurn();
 				break;
 			}
 		}
 		
-		return false;
+		return played;
 	}
 	
 	void switchTurn() {
