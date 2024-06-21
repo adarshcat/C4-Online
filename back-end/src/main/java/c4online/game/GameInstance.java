@@ -7,7 +7,7 @@ import c4online.websocket.WebSocketComm;
 import java.util.HashMap;
 
 public class GameInstance {
-	public final static int GAME_ABANDONED_TIME = 60 * 1000; // time for game to be considered abandoned by a player in millis
+	public final static int GAME_ABANDONED_TIME = 15 * 1000; // time for game to be considered abandoned by a player in millis
 
 	Player player1;
 	Player player2;
@@ -26,7 +26,7 @@ public class GameInstance {
 
 			System.out.println("A match is made! " + player1.username + " and " + player2.username);
 		} catch (Exception e) {
-			GameManager.terminateGame(this);
+			terminateGameWithAbort();
 		}
 
 		gameSession = new Connect4Session();
@@ -38,30 +38,17 @@ public class GameInstance {
 		sendBoardDataToPlayers();
 	}
 
-	public boolean parseMessage(int playerId, String message) {
+	public boolean parseMessage(int playerId, String method, String param) {
 		Player player = isPlayerInThisGame(playerId);
 		if (player == null) return false;
 
-		HashMap<String, String> jsonData = WebSocketComm.parseJSONPacket(message);
-		if (jsonData == null){
-			System.out.println("Invalid data");
-			return false;
-		}
-
-		String method = jsonData.get(WebSocketComm.METHOD_FIELD_ID);
-		String param = jsonData.get(WebSocketComm.PARAM_FIELD_ID);
-
-		if (method.equals(WebSocketComm.ping)) {
-			player.ping();
-			return true; // TODO: REMOVE THIS IN THE FUTURE RIGHT NOW I ADDED THIS TO AVOID ANNOYING PING FLOODING THE STDOUT
-		} else if (method.equals(WebSocketComm.play)){
+		// parse game related types of commands here
+		if (method.equals(WebSocketComm.play)){
 			try {
 				gameSession.playPosition(Integer.parseInt(param), getPlayerEnumFromId(playerId));
 				sendBoardDataToPlayers();
 			} catch (Exception ignored) {}
 		}
-
-		System.out.println("Parsing message: " + message + " from: " + player.username);
 
 		return true;
 	}
@@ -115,6 +102,14 @@ public class GameInstance {
 		System.out.println("Game terminated: " + winString + " wins");
 
 		// TODO: notify the players that the game is over and who wins (ofc with the rating changes and outcomes)
+
+		GameManager.terminateGame(this);
+	}
+
+	private void terminateGameWithAbort(){
+		System.out.println("Game terminated: aborted");
+
+		// TODO: notify the players that the game is over and the fact that it has been aborted
 
 		GameManager.terminateGame(this);
 	}

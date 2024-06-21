@@ -47,7 +47,6 @@ function matchStarted(otherPlayer){
 // functions for sending message over to the server
 function sendPlayCommand(col){
     let packet = {method: "play", param: col};
-    console.log(JSON.stringify(packet));
     socket.send(JSON.stringify(packet));
 }
 

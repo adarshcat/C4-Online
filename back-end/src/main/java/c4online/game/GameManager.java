@@ -24,7 +24,7 @@ public class GameManager {
 		scheduler.scheduleAtFixedRate(gameTask, 0, 2, TimeUnit.SECONDS);
 	}
 	
-	// game management realted functions
+	// game management related functions
 	public static void terminateGame(GameInstance gameInst) {
 		// game termination procedure: close player1's connection, player2's connection and then remove gameInstance
 		gameInst.player1.websocketSession.close();
@@ -43,8 +43,8 @@ public class GameManager {
 	public static Player connectPreviousPlayer(Player player) {
 		Player oldPlayer = matchmaker.updateSessionIfPresent(player.id, player.websocketSession);
 		if (oldPlayer == null) {
-			for (GameInstance ginst : gameInstances) {
-				oldPlayer = ginst.updateSessionIfPresent(player.id, player.websocketSession);
+			for (GameInstance gInst : gameInstances) {
+				oldPlayer = gInst.updateSessionIfPresent(player.id, player.websocketSession);
 				if (oldPlayer != null) return oldPlayer;
 			}
 		}
@@ -56,8 +56,8 @@ public class GameManager {
 		if (matchmaker.isPlayerInQueue(playerId)) {
 			return player_state.MATCHMAKING;
 		} else {
-			for (GameInstance ginst : gameInstances) {
-				if (ginst.isPlayerInThisGame(playerId) != null)
+			for (GameInstance gInst : gameInstances) {
+				if (gInst.isPlayerInThisGame(playerId) != null)
 					return player_state.IN_GAME;
 			}
 		}
@@ -65,9 +65,9 @@ public class GameManager {
 		return player_state.NONE;
 	}
 	
-	public static GameInstance forwardPlayerMessage(int playerId, String message) {
-		for (GameInstance ginst : gameInstances) {
-			if (ginst.parseMessage(playerId, message)) return ginst;
+	public static GameInstance forwardPlayerMessage(int playerId, String method, String param) {
+		for (GameInstance gInst : gameInstances) {
+			if (gInst.parseMessage(playerId, method, param)) return gInst;
 		}
 		
 		return null;

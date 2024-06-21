@@ -1,6 +1,7 @@
 package c4online.websocket;
 
 import java.net.HttpCookie;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.jetty.websocket.api.Session;
@@ -71,7 +72,7 @@ public class GameWebSocket {
 			// Check if the user is returning after a connection break
 			GameManager.player_state gameSessionExists = GameManager.doesConnectionExist(player.id);
 			if (gameSessionExists == GameManager.player_state.NONE) {
-				// the client is new and doesnt have any ongoing game sessions
+				// the client is new and doesn't have any ongoing game sessions
 				startNewSession();
 			} else {
 				// the client has a pre-existing game session, revert the state to that session
@@ -86,10 +87,27 @@ public class GameWebSocket {
 
 	@OnWebSocketMessage
 	public void onMessage(Session session, String message) {
+		// extract the relevant fields from the json packet
+		HashMap<String, String> jsonData = WebSocketComm.parseJSONPacket(message);
+		if (jsonData == null){
+			System.out.println("Invalid data");
+			return;
+		}
+
+		String method = jsonData.get(WebSocketComm.METHOD_FIELD_ID);
+		String param = jsonData.get(WebSocketComm.PARAM_FIELD_ID);
+		// ------------------------------------------------
+
+		// if it's a ping message, parse it early and return
+		if (method.equals(WebSocketComm.ping)) {
+			player.ping();
+			return;
+		}
+
 		if (gameInstance == null) {
-			gameInstance = GameManager.forwardPlayerMessage(player.id, message);
+			gameInstance = GameManager.forwardPlayerMessage(player.id, method, param);
 		} else {
-			gameInstance.parseMessage(player.id, message);
+			gameInstance.parseMessage(player.id, method, param);
 		}
 	}
 
