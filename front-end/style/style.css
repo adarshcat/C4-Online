@@ -1,0 +1,156 @@
+
+:root {
+    --backgroundCol: hsl(0, 30%, 23%);
+    --infoPanelCol: hsl(0, 30%, 28%);
+    --btnCol: hsl(0, 100%, 65%);
+
+    --backgroundCol: hsl(240, 30%, 23%);
+    --infoPanelCol: hsl(240, 30%, 28%);
+    --btnCol: hsl(240, 100%, 65%);
+}
+
+body{
+    background-color: var(--backgroundCol);
+}
+
+.logo{
+    margin: 5% auto 15% auto;
+}
+
+.gamePanel{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+    margin: 2%;
+
+    border-radius: 0.6rem;
+}
+
+.gameCanvas{
+    border-radius: 0.6rem;
+    background-color: white;
+}
+
+.gameCanvasContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.gameInfoContainer{
+    display: flex;
+    flex-direction: column;
+    margin-left: 3%;
+    border-radius: 0.6rem;
+    background-color: var(--infoPanelCol);
+    
+    padding: 4%;
+    padding-bottom: 2%;
+    padding-top: 2%;
+
+    width: 30%;
+}
+
+.timer{
+    text-align: right;
+    width: 30%;
+    border-radius: 0.4rem;
+    background-color: white;
+    padding: 2.1%;
+    margin: auto 3% auto auto;
+}
+
+.timerText{
+    font-size: 2.2rem;
+    color: black;
+    padding: 0;
+    margin: 0;
+    line-height: 100%;
+}
+
+.playerCard{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-radius: 0.4rem;
+    background-color: var(--infoPanelCol);
+    margin: auto 0 auto auto;
+}
+
+.playerInfoCard{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    padding: 1.5% 3% 1.5% 3%;
+}
+
+.playerName{
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-size: 1.65rem;
+}
+
+.playerRating{
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-size: 1.2rem;
+    margin-left: 5%;
+}
+
+button{
+    background-color: var(--btnCol);
+    border-color: var(--btnCol);
+    font-size: 1.4rem;
+}
+
+@media (max-aspect-ratio: 1/1) {
+    .gamePanel{
+        flex-direction: column;
+    }
+
+    .gameCanvasContainer{
+        margin: auto;
+    }
+
+    .gameInfoContainer{
+        margin: 3% auto auto auto;
+        width: 100%;
+        border-radius: 1.8rem;
+    }
+
+    button{
+        width: auto;
+        height: auto;
+        line-height: 100%;
+        font-size: 4.2rem;
+        padding: 5%;
+        margin-bottom: 3%;
+        border-radius: 1.8rem;
+    }
+
+    .playerName{
+        font-size: 4.4rem;
+    }
+    
+    .playerRating{
+        font-size: 4.0rem;
+    }
+
+    .timerText{
+        font-size: 6.6rem;
+    }
+
+    .gameCanvas{
+        border-radius: 1.8rem;
+    }
+    
+    .playerCard{
+        border-radius: 1.8rem;
+    }
+    
+    .timer{
+        border-radius: 1.8rem;
+    }
+}

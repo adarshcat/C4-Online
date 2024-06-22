@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="157.88994mm"
+   height="37.831245mm"
+   viewBox="0 0 157.88994 37.831245"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.71624579"
+     inkscape:cx="205.93489"
+     inkscape:cy="365.09813"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-28.389727,-31.973081)">
+    <text
+       xml:space="preserve"
+       style="font-size:38.8056px;font-family:roboto;-inkscape-font-specification:roboto;fill:#7474f1;stroke:#000000;stroke-width:1;stroke-opacity:1"
+       x="26.597013"
+       y="58.735073"
+       id="text790"><tspan
+         sodipodi:role="line"
+         id="tspan788"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Harlow Solid Italic';-inkscape-font-specification:'Harlow Solid Italic, ';fill:#fdfdff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1"
+         x="26.597013"
+         y="58.735073">C4 Online</tspan></text>
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 186.1791,69.447759 C 145.54477,57.257463 94.197765,64.645521 82.007465,68.708955 69.817165,72.772386 120.05596,58.36567 186.1791,69.447759 Z"
+       id="path5409" />
+  </g>
+</svg>

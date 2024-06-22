@@ -3,6 +3,19 @@
     <head>
         <title>C4 Play</title>
 
+        <!-- Google Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+        <!-- CSS Reset -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+
+        <!-- Milligram CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+
+        <!-- You should properly set the path from the main file. -->
+
+        <link rel="stylesheet" type="text/css" rel="noopener" target="_blank" href="/front-end/style/style.css">
+
         <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.js"></script>
         <!-- Main Script-->
         <script src="/front-end/service/play/game.js"></script>
@@ -10,11 +23,46 @@
     </head>
 
     <body>
-        <h1>Play!</h1>
 
-        <div id="gameCanvas"></div>
+        <div class="gamePanel">
 
-        <button onclick="onPlayBtnClick()">Play</button>
-        <button onclick="onSendBtnClick()">Send</button>
+            <div class="gameCanvasContainer">
+                <div class="playerCard">
+                    <div class="playerInfoCard">
+                        <p class="playerName">Player1</p>
+                        <p class="playerRating">(200)</p>
+                    </div>
+
+                    <div class="timer">
+                        <p class="timerText">03:10</p>
+                    </div>
+
+                </div>
+
+                <div id="gameCanvas" class="gameCanvas"></div>
+                
+                <div class="playerCard">
+                    <div class="playerInfoCard">
+                        <p class="playerName">Player2</p>
+                        <p class="playerRating">(306)</p>
+                    </div>
+
+                    <div class="timer">
+                        <p class="timerText">03:10</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="gameInfoContainer">
+                <img class="logo" id="logoBlue" src = "/front-end/assets/logo/logoBlue.svg" alt="Logo :)"/>
+                <img class="logo" id="logoRed" src = "/front-end/assets/logo/logoRed.svg" alt="Logo :)"/>
+
+                <button onclick="onPlayBtnClick()">Play</button>
+                <button onclick="onSendBtnClick()">Send</button>
+            </div>
+
+        </div>
     </body>
 </html>

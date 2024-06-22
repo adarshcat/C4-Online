@@ -15,7 +15,7 @@ public class SessionManager {
 		sessionMap = new ConcurrentHashMap<String, User>();
 		
 		// DEBUG - remove this block of code later
-			String debugSession = "o8iTXyek9Ty-Qr_0VkDBy-rKYE5OvhIS5wg9pHWTOOI";
+			String debugSession = "nWXJvvZb0h761OI87KENftZcBLSiU7wUXBd0LnDtVfQ";
 			User debugUser = DatabaseManager.userdb.getUserDataById(2);
 			sessionMap.put(debugSession, debugUser);
 			

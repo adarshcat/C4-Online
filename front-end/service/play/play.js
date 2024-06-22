@@ -2,6 +2,8 @@
 let socket;
 let pingInterval;
 
+let playerColor = "blue";
+
 function onPlayBtnClick(){
     socket = new WebSocket('/');
 
@@ -30,19 +32,45 @@ function onPlayBtnClick(){
     };
 }
 
+function changeTheme(){
+    var logoBlue = document.getElementById("logoBlue");
+    var logoRed = document.getElementById("logoRed");
+
+    if (playerColor == "red"){
+        document.body.style.setProperty("--backgroundCol", "hsl(0, 30%, 23%)");
+        document.body.style.setProperty("--infoPanelCol", "hsl(0, 30%, 28%)");
+        document.body.style.setProperty("--btnCol", "hsl(0, 100%, 65%)");
+
+        logoRed.style.display = "block";
+        logoBlue.style.display = "none";
+    } else{
+        document.body.style.setProperty("--backgroundCol", "hsl(240, 30%, 23%)");
+        document.body.style.setProperty("--infoPanelCol", "hsl(240, 30%, 28%)");
+        document.body.style.setProperty("--btnCol", "hsl(240, 100%, 65%)");
+
+        logoRed.style.display = "none";
+        logoBlue.style.display = "block";
+    }
+}
+
+function onDocumentLoaded(){
+    changeTheme();
+}
+
 function parseMessageFromServer(method, param){
     if (method == "match"){
         let playerData = JSON.parse(param);
         matchStarted(playerData);
     }
     else if (method == "board"){
-        parseBoard(param);
+        parseBoardFromServer(param);
     }
 }
 
 function matchStarted(otherPlayer){
-
+    // TODO: update the player card in the html with relavant data and start the match I guess
 }
+
 
 // functions for sending message over to the server
 function sendPlayCommand(col){
@@ -69,3 +97,7 @@ function onSendBtnClick(){
     if (socket == null) return;
     socket.send(`{"method": "hello", "param": ""}`);
 }
+
+
+// attach the login result checker to its appropriate function
+document.addEventListener("DOMContentLoaded", onDocumentLoaded);
