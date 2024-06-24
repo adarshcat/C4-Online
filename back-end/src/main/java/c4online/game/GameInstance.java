@@ -7,7 +7,7 @@ import c4online.websocket.WebSocketComm;
 import java.util.HashMap;
 
 public class GameInstance {
-	public final static int GAME_ABANDONED_TIME = 15 * 1000; // time for game to be considered abandoned by a player in millis
+	public final static int GAME_ABANDONED_TIME = 60 * 1000; // time for game to be considered abandoned by a player in millis
 
 	Player player1;
 	Player player2;
@@ -30,12 +30,16 @@ public class GameInstance {
 		}
 
 		gameSession = new Connect4Session();
+
+		sendColorDataToPlayers();
+		sendTurnDataToPlayers();
 	}
 
 	// runs a periodic game instance management task
 	void runTask() {
 		terminateGameIfTimedOut();
 		sendBoardDataToPlayers();
+		sendTimeDataToPlayers();
 	}
 
 	public boolean parseMessage(int playerId, String method, String param) {
@@ -45,8 +49,10 @@ public class GameInstance {
 		// parse game related types of commands here
 		if (method.equals(WebSocketComm.play)){
 			try {
-				gameSession.playPosition(Integer.parseInt(param), getPlayerEnumFromId(playerId));
+				int playPosition = Integer.parseInt(param);
+				gameSession.playPosition(playPosition, getPlayerEnumFromId(playerId));
 				sendBoardDataToPlayers();
+				sendPlayDataToOtherPlayer(playerId, playPosition);
 			} catch (Exception ignored) {}
 		}
 
@@ -58,6 +64,40 @@ public class GameInstance {
 	private void sendBoardDataToPlayers() {
 		String data = WebSocketComm.encodeBoardToString(gameSession.board);
 		broadcastMessage(data);
+	}
+
+	private void sendPlayDataToOtherPlayer(int playerId, int playPosition){
+		Player.type playerEnum = getPlayerEnumFromId(playerId);
+
+		if (playerEnum == Player.type.PLAYER1){
+			sendToPlayer2(WebSocketComm.constructJSONPacket(WebSocketComm.played, String.valueOf(playPosition)));
+		} else if (playerEnum == Player.type.PLAYER2){
+			sendToPlayer1(WebSocketComm.constructJSONPacket(WebSocketComm.played, String.valueOf(playPosition)));
+		}
+	}
+
+	private void sendColorDataToPlayers(){
+		sendToPlayer1(WebSocketComm.constructJSONPacket(WebSocketComm.color, WebSocketComm.PLAYER1_COLOR));
+		sendToPlayer2(WebSocketComm.constructJSONPacket(WebSocketComm.color, WebSocketComm.PLAYER2_COLOR));
+	}
+
+	private void sendTurnDataToPlayers(){
+		broadcastMessage(WebSocketComm.constructJSONPacket(WebSocketComm.turn, WebSocketComm.getTurnStringFromEnum(gameSession.turn)));
+	}
+
+	private void sendTimeDataToPlayers(){
+		int player1TimeLeft = gameSession.getTimeLeft(Player.type.PLAYER1);
+		int player2TimeLeft = gameSession.getTimeLeft(Player.type.PLAYER2);
+
+		String param = "{\"" + WebSocketComm.PLAYER1_COLOR + "\": " + player1TimeLeft + ", \""+WebSocketComm.PLAYER2_COLOR + "\": " + player2TimeLeft + "}";
+
+		broadcastMessage(WebSocketComm.constructJSONPacket(WebSocketComm.time, param));
+	}
+
+	private void sendOpponentDataToPlayers(){
+		// sends info of their opponents to the players
+		sendToPlayer1(WebSocketComm.constructJSONPacket(WebSocketComm.match, player2.parseToJSON()));
+		sendToPlayer2(WebSocketComm.constructJSONPacket(WebSocketComm.match, player1.parseToJSON()));
 	}
 
 	private void broadcastMessage(String msg) {
@@ -78,7 +118,10 @@ public class GameInstance {
 	}
 	
 	private void sendGameStateToReturningPlayer(Player returningPlayer) {
+		sendOpponentDataToPlayers();
+		sendColorDataToPlayers();
 		sendBoardDataToPlayers();
+		sendTurnDataToPlayers();
 	}
 	// --------------------------------------------------------------
 

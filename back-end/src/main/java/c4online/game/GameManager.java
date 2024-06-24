@@ -21,7 +21,7 @@ public class GameManager {
 	private static void startGameTask() {
 		GameTask gameTask = new GameTask(gameInstances, matchmaker);
 		// executes the run function in teh gameTask object every 2 seconds
-		scheduler.scheduleAtFixedRate(gameTask, 0, 2, TimeUnit.SECONDS);
+		scheduler.scheduleAtFixedRate(gameTask, 0, 500, TimeUnit.MILLISECONDS);
 	}
 	
 	// game management related functions

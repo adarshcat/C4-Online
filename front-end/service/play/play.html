@@ -18,6 +18,7 @@
 
         <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.js"></script>
         <!-- Main Script-->
+        <script src="/front-end/service/play/particle.js"></script>
         <script src="/front-end/service/play/game.js"></script>
         <script src="/front-end/service/play/play.js"></script>
     </head>
@@ -29,12 +30,12 @@
             <div class="gameCanvasContainer">
                 <div class="playerCard">
                     <div class="playerInfoCard">
-                        <p class="playerName">Player1</p>
-                        <p class="playerRating">(200)</p>
+                        <p class="playerName" id="opponentName">Player1</p>
+                        <p class="playerRating" id="opponentRating">(200)</p>
                     </div>
 
                     <div class="timer">
-                        <p class="timerText">03:10</p>
+                        <p class="timerText" id="opponentTime">03:10</p>
                     </div>
 
                 </div>
@@ -43,12 +44,12 @@
                 
                 <div class="playerCard">
                     <div class="playerInfoCard">
-                        <p class="playerName">Player2</p>
-                        <p class="playerRating">(306)</p>
+                        <p class="playerName" id="myName">Player2</p>
+                        <p class="playerRating" id="myRating">(306)</p>
                     </div>
 
                     <div class="timer">
-                        <p class="timerText">03:10</p>
+                        <p class="timerText" id="myTime">03:10</p>
                     </div>
 
                 </div>

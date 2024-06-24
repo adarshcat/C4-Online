@@ -2,7 +2,10 @@
 let socket;
 let pingInterval;
 
-let playerColor = "blue";
+let playerColor = "none";
+
+let opponentTime;
+let myTime;
 
 function onPlayBtnClick(){
     socket = new WebSocket('/');
@@ -26,9 +29,7 @@ function onPlayBtnClick(){
         let method = jsonPacket.method;
         let param = jsonPacket.param;
 
-        console.log('method:', method, "  param:", param);
-
-        parseMessageFromServer(method, param)
+        parseMessageFromServer(method, param);
     };
 }
 
@@ -43,10 +44,17 @@ function changeTheme(){
 
         logoRed.style.display = "block";
         logoBlue.style.display = "none";
-    } else{
+    } else if (playerColor == "blue"){
         document.body.style.setProperty("--backgroundCol", "hsl(240, 30%, 23%)");
         document.body.style.setProperty("--infoPanelCol", "hsl(240, 30%, 28%)");
         document.body.style.setProperty("--btnCol", "hsl(240, 100%, 65%)");
+
+        logoRed.style.display = "none";
+        logoBlue.style.display = "block";
+    } else{
+        document.body.style.setProperty("--backgroundCol", "hsl(240, 0%, 23%)");
+        document.body.style.setProperty("--infoPanelCol", "hsl(240, 0%, 28%)");
+        document.body.style.setProperty("--btnCol", "hsl(240, 0%, 25%)");
 
         logoRed.style.display = "none";
         logoBlue.style.display = "block";
@@ -55,6 +63,9 @@ function changeTheme(){
 
 function onDocumentLoaded(){
     changeTheme();
+
+    opponentTime = document.getElementById("opponentTime");
+    myTime = document.getElementById("myTime");
 }
 
 function parseMessageFromServer(method, param){
@@ -64,11 +75,71 @@ function parseMessageFromServer(method, param){
     }
     else if (method == "board"){
         parseBoardFromServer(param);
+    } else if (method == "color"){
+        playerColor = param;
+        changeTheme();
+        turn = "red";
+    } else if (method == "played"){
+        let col = int(param);
+        playOpponent(col);
+    } else if (method == "turn"){
+        turn = param;
+    } else if (method == "time"){
+        updateClock(param);
     }
 }
 
-function matchStarted(otherPlayer){
-    // TODO: update the player card in the html with relavant data and start the match I guess
+function updateClock(param){
+    let timeData = JSON.parse(param);
+
+    myTime.innerText = millisToClockDisplay(timeData[playerColor]);
+
+    let opponentColor = (playerColor == "red")?"blue":"red";
+
+    opponentTime.innerText = millisToClockDisplay(timeData[opponentColor]);
+}
+
+function millisToClockDisplay(millis){
+    let secs = int(millis / 1000);
+    let minute = int(secs / 60);
+    let seconds = int(secs % 60);
+
+    return String(minute).padStart(2, "0") + ": " + String(seconds).padStart(2, "0");
+}
+
+async function matchStarted(otherPlayer){
+    let myName = document.getElementById("myName");
+    let myRating = document.getElementById("myRating");
+
+    let opponentName = document.getElementById("opponentName");
+    let opponentRating = document.getElementById("opponentRating");
+
+    let myData = await fetchMyInfo();
+
+    myName.innerText = myData[0];
+    myRating.innerText = "(" + myData[1] + ")";
+
+    opponentName.innerText = otherPlayer["username"];
+    opponentRating.innerText = "(" + otherPlayer["rating"] + ")";
+}
+
+async function fetchMyInfo(){
+    try{
+        // try getting user info for player card display
+        const response = await fetch("/userinfo");
+        const jsonData = await response.json();
+        
+        return [jsonData["username"], jsonData["rating"]];
+    } catch(e){
+        // in case of error... idk bro
+        return "";
+    }
+}
+
+function colToPlayer(color){
+    if (color == "red") return 1;
+    else if (color == "blue") return 2;
+    return -1;
 }
 
 

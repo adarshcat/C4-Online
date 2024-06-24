@@ -9,13 +9,20 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.HashMap;
 
 public class WebSocketComm {
-	public static String match = "match";
-	public static String ping = "ping";
-	public static String play = "play";
-	public static String board = "board";
+	public static String match = "match"; // method name when broadcasting match begun data to players
+	public static String color = "color"; // method name when broadcasting color data to players
+	public static String ping = "ping"; // method name when receiving pings from players
+	public static String play = "play"; // method name when receiving play position from players
+	public static String board = "board"; // method name when broadcasting board state to players
+	public static String played = "played"; // method name when broadcasting play position to other player
+	public static String turn = "turn"; // method name when broadcasting turn position to players
+	public static String time = "time"; // method name when broadcasting time data to players
 
 	public static final String METHOD_FIELD_ID = "method";
 	public static final String PARAM_FIELD_ID = "param";
+
+	public static final String PLAYER1_COLOR = "red";
+	public static final String PLAYER2_COLOR = "blue";
 	
 	private static final int PLAYER1 = 1;
 	private static final int PLAYER2 = 2;
@@ -67,5 +74,12 @@ public class WebSocketComm {
         } catch (Exception e) {
 			return null;
         }
+	}
+
+	public static String getTurnStringFromEnum(Player.type playerEnum){
+		if (playerEnum == Player.type.PLAYER1) return PLAYER1_COLOR;
+		else if (playerEnum == Player.type.PLAYER2) return PLAYER2_COLOR;
+
+		return null;
 	}
 }
