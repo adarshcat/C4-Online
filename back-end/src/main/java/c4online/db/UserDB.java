@@ -130,36 +130,35 @@ public class UserDB {
 		
 		return false;
 	}
-	
-	
+
 	// functions for converting database data into native data structures
-	public User getUserDataById(int userId) {
-		User user = null;
-		
+	public boolean populateUserDataById(int userId, User user) {
+		boolean populated = false;
+
 		try {
 			String sqlQuery = "SELECT * FROM "+userTable+" WHERE id = ?";
-			
+
 			PreparedStatement stmt = conn.prepareStatement(sqlQuery);
 			stmt.setInt(1, userId);
-			
+
 			ResultSet rset = stmt.executeQuery();
-			
+
 			while(rset.next()) {
-				user = new User();
-				
+				populated = true;
+
 				user.id = rset.getInt("id");
 				user.username = rset.getString("username");
 				user.email = rset.getString("email");
 				user.createdAt = rset.getTimestamp("created_at");
 				user.lastLogin = rset.getTimestamp("last_login");
 			}
-			
+
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			return false;
 		}
-		
-		return user;
+
+		return populated;
 	}
 }

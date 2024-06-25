@@ -105,6 +105,22 @@ button{
     font-size: 1.4rem;
 }
 
+.loader {
+    margin: 3% auto 10% auto;
+    border: 1rem solid #f3f3f3;
+    border-top: 1rem solid var(--btnCol);
+    border-radius: 50%;
+    width: 5rem;
+    height: 5rem;
+    animation: spin 2s linear infinite;
+    display: none;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 @media (max-aspect-ratio: 1/1) {
     .gamePanel{
         flex-direction: column;
@@ -152,5 +168,13 @@ button{
     
     .timer{
         border-radius: 1.8rem;
+    }
+
+    .loader {
+        border: 1.6rem solid #f3f3f3;
+        border-top: 1.6rem solid var(--btnCol);
+        border-radius: 50%;
+        width: 8rem;
+        height: 8rem;
     }
 }

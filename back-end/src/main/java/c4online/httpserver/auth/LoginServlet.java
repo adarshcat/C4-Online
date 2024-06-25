@@ -33,7 +33,7 @@ public class LoginServlet extends WebPage{
 			
 			if (userId != -1) {
 				// create User data structure from the database and create a session with it
-				User user = DatabaseManager.userdb.getUserDataById(userId);
+				User user = DatabaseManager.getUserDataById(userId);
 				String sessionId = SessionManager.createSession(user);
 				
 				// Update last login for the user

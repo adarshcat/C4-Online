@@ -31,6 +31,13 @@ function onPlayBtnClick(){
 
         parseMessageFromServer(method, param);
     };
+
+    // hide the play button so that it can't be pressed again and show the matchmaking loader
+    let playBtn = document.getElementById("playBtn");
+    let matchmakingLoader = document.getElementById("matchmakingLoader");
+
+    playBtn.style.display = "none";
+    matchmakingLoader.style.display = "block";
 }
 
 function changeTheme(){
@@ -61,11 +68,25 @@ function changeTheme(){
     }
 }
 
-function onDocumentLoaded(){
+async function onDocumentLoaded(){
     changeTheme();
+
+    // check url parameters and redirect if autoplay is true
+    const urlParams = new URLSearchParams(window.location.search);
+    const autoPlay = urlParams.get("autoplay");
+
+    if (autoPlay == "true"){
+        onPlayBtnClick();
+    }
 
     opponentTime = document.getElementById("opponentTime");
     myTime = document.getElementById("myTime");
+
+    // update the player info
+    let myData = await fetchMyInfo();
+
+    myName.innerText = myData[0];
+    myRating.innerText = "(" + myData[1] + ")";
 }
 
 function parseMessageFromServer(method, param){
@@ -121,6 +142,9 @@ async function matchStarted(otherPlayer){
 
     opponentName.innerText = otherPlayer["username"];
     opponentRating.innerText = "(" + otherPlayer["rating"] + ")";
+
+    let matchmakingLoader = document.getElementById("matchmakingLoader");
+    matchmakingLoader.style.display = "none";
 }
 
 async function fetchMyInfo(){

@@ -1,8 +1,8 @@
 package c4online.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import c4online.sessions.User;
+
+import java.sql.*;
 
 public class DatabaseManager {
 	static Connection connection;
@@ -26,5 +26,15 @@ public class DatabaseManager {
 		}
 
 		userdb = new UserDB(connection);
+	}
+
+	// functions for converting database data into native data structures
+	public static User getUserDataById(int userId) {
+		User user = new User();
+
+		boolean populated = userdb.populateUserDataById(userId, user);
+		if (!populated) return null;
+
+		return user;
 	}
 }
