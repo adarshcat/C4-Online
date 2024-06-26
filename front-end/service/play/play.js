@@ -109,6 +109,9 @@ function parseMessageFromServer(method, param){
         turn = param;
     } else if (method == "time"){
         updateClock(param);
+    } else if (method == "gameTerm"){
+        let termData = JSON.parse(param);
+        gameTerminated(termData);
     }
 }
 
@@ -173,6 +176,33 @@ function colToPlayer(color){
     return -1;
 }
 
+function gameTerminated(param){
+    let gameResultPanel = document.getElementById("gameResultPanel");
+    let resultText = document.getElementById("resultText");
+    let ratingText = document.getElementById("ratingText");
+
+    // on game termination, display the game result panel
+    gameResultPanel.style.display = "block";
+
+    if (param["reason"] == "win"){
+        if (param["winner"] == playerColor)
+            resultText.innerText = "You Win";
+        else
+            resultText.innerText = "You Lose";
+    } else if (param["reason"] == "abort"){
+        resultText.innerText = "Game aborted";
+    } else if (param["reason"] == "draw"){
+        resultText.innerText = "Draw";
+    }
+
+    let ratingChange = int(param["ratingChange"]);
+    let sign = "";
+
+    if (ratingChange < 0) sign = "-";
+    else if (ratingChange > 0) sign = "+";
+
+    ratingText.innerText = "Rating: " + sign + abs(param["ratingChange"]);
+}
 
 // functions for sending message over to the server
 function sendPlayCommand(col){

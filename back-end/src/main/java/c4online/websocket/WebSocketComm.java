@@ -19,6 +19,7 @@ public class WebSocketComm {
 	public static String time = "time"; // method name when broadcasting time data to players
 	public static String resign = "resign"; // method name when receiving resign request from the client
 	public static String cancelMatchmaking = "cancelMM"; // method name when receiving cancel matchmaking request from the client
+	public static String gameTerm = "gameTerm"; // method name when broadcasting game termination event to the players
 
 	public static final String METHOD_FIELD_ID = "method";
 	public static final String PARAM_FIELD_ID = "param";
@@ -46,6 +47,12 @@ public class WebSocketComm {
 		}
 		
 		return constructJSONPacket(board, param.toString());
+	}
+
+	public static String constructGameTermPacket(String reason, String winnerColor, int ratingChange){
+		String param = "{\"reason\": \"" + reason + "\", \"winner\": \"" + winnerColor + "\", \"ratingChange\": " + ratingChange + "}";
+
+		return constructJSONPacket(gameTerm, param);
 	}
 
 	public static String constructJSONPacket(String methodName, String paramStr){
@@ -78,7 +85,7 @@ public class WebSocketComm {
         }
 	}
 
-	public static String getTurnStringFromEnum(Player.type playerEnum){
+	public static String getColorStringFromEnum(Player.type playerEnum){
 		if (playerEnum == Player.type.PLAYER1) return PLAYER1_COLOR;
 		else if (playerEnum == Player.type.PLAYER2) return PLAYER2_COLOR;
 

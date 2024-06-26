@@ -119,6 +119,54 @@ button{
 .hiddenButton{
     display: none;
 }
+
+.gameResultPanel{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #00000055;
+
+    top: 0;
+    left: 0;
+
+    display: none;
+
+    z-index: 500;
+}
+
+.resultPanel{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 30%;
+    transform: translate(-50%, -50%);
+    padding: 3%;
+    background-color: var(--infoPanelCol);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    border-radius: 3%;
+    text-align: center;
+}
+
+.resultText{
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
+    font-size: 2.5rem;
+}
+
+.ratingText{
+    /* text-transform: uppercase; */
+    font-weight: bold;
+    color: white;
+    font-size: 2rem;
+}
+
+hr{
+    border-color: var(--btnCol);
+}
   
 @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -180,5 +228,25 @@ button{
         border-radius: 50%;
         width: 8rem;
         height: 8rem;
+    }
+
+    .resultPanel{
+        width: 75%;
+        padding: 7%;
+        border-radius: 1.8rem;
+    }
+    
+    .resultText{
+        text-transform: uppercase;
+        font-weight: bold;
+        color: white;
+        font-size: 5rem;
+    }
+    
+    .ratingText{
+        /* text-transform: uppercase; */
+        font-weight: bold;
+        color: white;
+        font-size: 4rem;
     }
 }

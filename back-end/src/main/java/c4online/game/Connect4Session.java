@@ -4,7 +4,7 @@ class Connect4Session {
 	final static int WIDTH = 7;
 	final static int HEIGHT = 6;
 
-	final static long TOTAL_GAME_TIME = 1000 * 60 * 3; // 3 minutes in millis
+	final static long TOTAL_GAME_TIME = 1000 * 60 * 1 / 6; // 3 minutes in millis
 	
 	Player.type[][] board;
 	Player.type turn = Player.type.PLAYER1;

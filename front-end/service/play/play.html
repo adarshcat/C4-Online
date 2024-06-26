@@ -12,7 +12,7 @@
         <!-- Milligram CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
 
-        <link rel="stylesheet" type="text/css" rel="noopener" target="_blank" href="/front-end/style/style.css">
+        <link rel="stylesheet" type="text/css" rel="noopener" target="_blank" href="/front-end/style/playStyle.css">
 
         <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.js"></script>
         <!-- Main Script-->
@@ -66,7 +66,16 @@
                 <button onclick="onResignBtnClick()" id="resignBtn" class="hiddenButton">Resign</button>
                 <button onclick="onCancelMatchmakingBtnClick()" id="cancelMatchmakingBtn" class="hiddenButton">Cancel Matchmaking</button>
             </div>
+        </div>
 
+        <div class="gameResultPanel" id="gameResultPanel">
+            <div class="resultPanel">
+                <div class="resultText" id="resultText">You win</div> <br/>
+                <div class="ratingText" id="ratingText">Rating: +8</div>
+                <hr/>
+                <button onclick="location.href = '/play?autoplay=true'">Play</button><br/>
+                <button onclick="location.href = '/home'">Home</button>
+            </div>
         </div>
     </body>
 </html>

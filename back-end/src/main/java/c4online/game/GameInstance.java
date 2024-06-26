@@ -91,7 +91,7 @@ public class GameInstance {
 	}
 
 	private void sendTurnDataToPlayers(){
-		broadcastMessage(WebSocketComm.constructJSONPacket(WebSocketComm.turn, WebSocketComm.getTurnStringFromEnum(gameSession.turn)));
+		broadcastMessage(WebSocketComm.constructJSONPacket(WebSocketComm.turn, WebSocketComm.getColorStringFromEnum(gameSession.turn)));
 	}
 
 	private void sendTimeDataToPlayers(){
@@ -137,11 +137,15 @@ public class GameInstance {
 
 	// game termination functions
 	private void terminateGameIfTimedOut() {
-		if (player1.timeSinceLastPing() > GAME_ABANDONED_TIME) {
+		// terminates the game with the other player winning, if a player's last ping is beyond a certain time limit, or they ran out on clock
+		int player1TimeLeft = gameSession.getTimeLeft(Player.type.PLAYER1);
+		int player2TimeLeft = gameSession.getTimeLeft(Player.type.PLAYER2);
+
+		if (player1.timeSinceLastPing() > GAME_ABANDONED_TIME || player1TimeLeft <= 0) {
 			terminateGameWithWin(Player.type.PLAYER2);
 			System.out.println("Timed out");
 		}
-		if (player2.timeSinceLastPing() > GAME_ABANDONED_TIME) {
+		if (player2.timeSinceLastPing() > GAME_ABANDONED_TIME || player2TimeLeft <= 0) {
 			terminateGameWithWin(Player.type.PLAYER1);
 			System.out.println("Timed out");
 		}
@@ -153,7 +157,11 @@ public class GameInstance {
 		String winString = (winner == Player.type.PLAYER1)? player1.username : player2.username;
 		System.out.println("Game terminated: " + winString + " wins");
 
-		// TODO: notify the players that the game is over and who wins (ofc with the rating changes and outcomes)
+		String player1Packet = WebSocketComm.constructGameTermPacket("win", WebSocketComm.getColorStringFromEnum(winner), 5);
+		String player2Packet = WebSocketComm.constructGameTermPacket("win", WebSocketComm.getColorStringFromEnum(winner), -5);
+
+		sendToPlayer1(player1Packet);
+		sendToPlayer2(player2Packet);
 
 		GameManager.terminateGame(this);
 	}
@@ -161,7 +169,17 @@ public class GameInstance {
 	private void terminateGameWithAbort(){
 		System.out.println("Game terminated: aborted");
 
-		// TODO: notify the players that the game is over and the fact that it has been aborted
+		String packet = WebSocketComm.constructGameTermPacket("abort", "", 0);
+		broadcastMessage(packet);
+
+		GameManager.terminateGame(this);
+	}
+
+	private void terminateGameWithDraw(){
+		System.out.println("Game terminated: draw");
+
+		String packet = WebSocketComm.constructGameTermPacket("draw", "", 0);
+		broadcastMessage(packet);
 
 		GameManager.terminateGame(this);
 	}
