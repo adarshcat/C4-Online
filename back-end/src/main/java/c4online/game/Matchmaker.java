@@ -32,6 +32,18 @@ class Matchmaker {
 		// add the user into the queue
 		players.add(newPlayer);
 	}
+
+	boolean removePlayer(int playerId){
+		for (int i=0; i<players.size(); i++) {
+			Player player = players.get(i);
+			if (player.id == playerId) {
+				players.remove(i);
+				return true;
+			}
+		}
+
+		return false;
+	}
 	
 	Player updateSessionIfPresent(int playerId, Session newSession) {
 		for (Player player : players) {

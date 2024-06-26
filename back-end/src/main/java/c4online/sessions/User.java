@@ -17,7 +17,6 @@ public class User {
 	public int gamesPlayed;
 	public int gamesWon;
 	public int gamesLost;
-	public int gamesDraw;
 	
 	public void printData() {
 		System.out.print("id "+id+" ");
@@ -37,7 +36,6 @@ public class User {
 		map.put("gamesPlayed", String.valueOf(gamesPlayed));
 		map.put("gamesWon", String.valueOf(gamesWon));
 		map.put("gamesLost", String.valueOf(gamesLost));
-		map.put("gamesDraw", String.valueOf(gamesDraw));
 		
 		String jsonData = "";
 		ObjectMapper objectMapper = new ObjectMapper();

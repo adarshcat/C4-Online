@@ -9,7 +9,6 @@ import c4online.sessions.User;
 
 public class UserDB {
 	private static final String userTable = "users";
-	//private static final String rankingsTable = "rankings";
 	
 	private Connection conn;
 

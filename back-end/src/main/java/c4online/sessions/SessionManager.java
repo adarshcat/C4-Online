@@ -15,11 +15,11 @@ public class SessionManager {
 		sessionMap = new ConcurrentHashMap<String, User>();
 		
 		// DEBUG - remove this block of code later
-			String debugSession = "AR4EayzPA1swQGURLJ98Y8goE-T4uG0B7UcGCcL87s8";
+			String debugSession = "0mY_V04azp3XSblAXN5sLsehqM4xMrVautHi_WqJKwI";
 			User debugUser = DatabaseManager.getUserDataById(1);
 			sessionMap.put(debugSession, debugUser);
 
-			String debugSession2 = "W9OPheQK1dMVY0hncclVPGc9gNa5p4oNRLLgmGFtcSA";
+			String debugSession2 = "xpzlVLGERirG4ogooNTr8CSMI-Tuz8McvM79Seb6T5g";
 			User debugUser2 = DatabaseManager.getUserDataById(2);
 			sessionMap.put(debugSession2, debugUser2);
 		// ----------------------------------------

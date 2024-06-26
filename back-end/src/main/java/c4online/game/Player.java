@@ -21,7 +21,6 @@ public class Player extends User{
 		gamesPlayed= user.gamesPlayed;
 		gamesWon = user.gamesWon;
 		gamesLost = user.gamesLost;
-		gamesDraw = user.gamesDraw;
 	}
 	
 	public void ping() {

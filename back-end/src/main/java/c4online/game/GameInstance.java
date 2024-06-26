@@ -54,6 +54,15 @@ public class GameInstance {
 				sendBoardDataToPlayers();
 				sendPlayDataToOtherPlayer(playerId, playPosition);
 			} catch (Exception ignored) {}
+		} else if (method.equals(WebSocketComm.resign)){
+			Player.type playerEnum = getPlayerEnumFromId(player.id);
+			if (playerEnum == Player.type.PLAYER1){
+				// If it's player 1 sending resign request, terminate game with player 2 winning
+				terminateGameWithWin(Player.type.PLAYER2);
+			} else if (playerEnum == Player.type.PLAYER2){
+				// If it's player 2 sending resign request, terminate game with player 1 winning
+				terminateGameWithWin(Player.type.PLAYER1);
+			}
 		}
 
 		return true;
@@ -159,7 +168,7 @@ public class GameInstance {
 	// ----------------------------
 
 
-	// user management functions
+	// player management functions
 	Player updateSessionIfPresent(int playerId, Session newSession) {
 		Player player = isPlayerInThisGame(playerId);
 

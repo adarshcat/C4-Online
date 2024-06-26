@@ -17,6 +17,8 @@ public class WebSocketComm {
 	public static String played = "played"; // method name when broadcasting play position to other player
 	public static String turn = "turn"; // method name when broadcasting turn position to players
 	public static String time = "time"; // method name when broadcasting time data to players
+	public static String resign = "resign"; // method name when receiving resign request from the client
+	public static String cancelMatchmaking = "cancelMM"; // method name when receiving cancel matchmaking request from the client
 
 	public static final String METHOD_FIELD_ID = "method";
 	public static final String PARAM_FIELD_ID = "param";

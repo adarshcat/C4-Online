@@ -34,7 +34,7 @@ public class GameManager {
 	// ---------------------------------
 	
 	
-	// user management related functions
+	// player management related functions
 	public static void addNewPlayer(Player newPlayer) {
 		matchmaker.queuePlayer(newPlayer);
 		System.out.println("Added "+newPlayer.username+" to matchmaking queue");
@@ -71,6 +71,11 @@ public class GameManager {
 		}
 		
 		return null;
+	}
+
+	public static void removeFromMatchmaking(int playerId){
+		boolean didRemove = matchmaker.removePlayer(playerId);
+		System.out.println(didRemove?"Removed a player from matchmaking":"Wasn't able to remove a player from matchmaking");
 	}
 	// ----------------------------------
 }

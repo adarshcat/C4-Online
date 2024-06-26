@@ -102,6 +102,9 @@ public class GameWebSocket {
 		if (method.equals(WebSocketComm.ping)) {
 			player.ping();
 			return;
+		} else if (method.equals(WebSocketComm.cancelMatchmaking)){
+			GameManager.removeFromMatchmaking(player.id);
+			return;
 		}
 
 		if (gameInstance == null) {

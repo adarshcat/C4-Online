@@ -35,9 +35,11 @@ function onPlayBtnClick(){
     // hide the play button so that it can't be pressed again and show the matchmaking loader
     let playBtn = document.getElementById("playBtn");
     let matchmakingLoader = document.getElementById("matchmakingLoader");
+    let cancelMatchmakingBtn = document.getElementById("cancelMatchmakingBtn");
 
     playBtn.style.display = "none";
     matchmakingLoader.style.display = "block";
+    cancelMatchmakingBtn.style.display = "block";
 }
 
 function changeTheme(){
@@ -144,7 +146,12 @@ async function matchStarted(otherPlayer){
     opponentRating.innerText = "(" + otherPlayer["rating"] + ")";
 
     let matchmakingLoader = document.getElementById("matchmakingLoader");
+    let resignBtn = document.getElementById("resignBtn");
+    let cancelMatchmakingBtn = document.getElementById("cancelMatchmakingBtn");
+
     matchmakingLoader.style.display = "none";
+    cancelMatchmakingBtn.style.display = "none";
+    resignBtn.style.display = "block";
 }
 
 async function fetchMyInfo(){
@@ -188,9 +195,19 @@ function stopPing(){
 
 
 // button click callbacks
-function onSendBtnClick(){
-    if (socket == null) return;
-    socket.send(`{"method": "hello", "param": ""}`);
+function onResignBtnClick(){
+    // when resign button is clicked, send a resign request to the server
+    let packet = {method: "resign", param: ""};
+    socket.send(JSON.stringify(packet));
+}
+
+function onCancelMatchmakingBtnClick(){
+    // send a request to the server to remove from the matchmaking list
+    let packet = {method: "cancelMM", param: ""};
+    socket.send(JSON.stringify(packet));
+
+    // redirect to the page afterwards
+    location.href = "/play";
 }
 
 
