@@ -50,9 +50,11 @@ public class GameInstance {
 		if (method.equals(WebSocketComm.play)){
 			try {
 				int playPosition = Integer.parseInt(param);
-				gameSession.playPosition(playPosition, getPlayerEnumFromId(playerId));
+				Connect4Session.game_state gameState = gameSession.playPosition(playPosition, getPlayerEnumFromId(playerId));
 				sendBoardDataToPlayers();
 				sendPlayDataToOtherPlayer(playerId, playPosition);
+
+				parseGameState(gameState);
 			} catch (Exception ignored) {}
 		} else if (method.equals(WebSocketComm.resign)){
 			Player.type playerEnum = getPlayerEnumFromId(player.id);
@@ -68,6 +70,13 @@ public class GameInstance {
 		return true;
 	}
 
+	private void parseGameState(Connect4Session.game_state gameState){
+		if (gameState == Connect4Session.game_state.NONE) return;
+
+		if (gameState == Connect4Session.game_state.P1_WIN) terminateGameWithWin(Player.type.PLAYER1);
+		else if (gameState == Connect4Session.game_state.P2_WIN) terminateGameWithWin(Player.type.PLAYER2);
+		else if (gameState == Connect4Session.game_state.DRAW) terminateGameWithDraw();
+	}
 
 	// functions for sending data over to the players via websocket
 	private void sendBoardDataToPlayers() {
@@ -157,8 +166,18 @@ public class GameInstance {
 		String winString = (winner == Player.type.PLAYER1)? player1.username : player2.username;
 		System.out.println("Game terminated: " + winString + " wins");
 
-		String player1Packet = WebSocketComm.constructGameTermPacket("win", WebSocketComm.getColorStringFromEnum(winner), 5);
-		String player2Packet = WebSocketComm.constructGameTermPacket("win", WebSocketComm.getColorStringFromEnum(winner), -5);
+		int ratingChange = RatingManager.calcRatingChange(player1.rating, player2.rating, winner);
+		int player1dr = ratingChange;
+		int player2dr = ratingChange;
+
+		if (winner == Player.type.PLAYER1) player2dr *= -1;
+		else if (winner == Player.type.PLAYER2) player1dr *= -1;
+
+		// update the player's rating in the database
+		RatingManager.updateRatingInDB(player1dr, player2dr, player1.id, player2.id);
+
+		String player1Packet = WebSocketComm.constructGameTermPacket("win", WebSocketComm.getColorStringFromEnum(winner), player1dr);
+		String player2Packet = WebSocketComm.constructGameTermPacket("win", WebSocketComm.getColorStringFromEnum(winner), player2dr);
 
 		sendToPlayer1(player1Packet);
 		sendToPlayer2(player2Packet);

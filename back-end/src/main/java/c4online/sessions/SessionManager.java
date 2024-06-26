@@ -49,8 +49,16 @@ public class SessionManager {
 		
 		return somethingRemoved;
 	}
-	
-	
+
+	public static void updateSessionByUserId(int userId, User user) {
+		for (ConcurrentHashMap.Entry<String, User> pair : sessionMap.entrySet()) {
+			if (pair.getValue().id == userId) {
+				sessionMap.put(pair.getKey(), user);
+			}
+		}
+	}
+
+
 	// session query related functions
 	public static User getUserFromSessionId(String sessionId) {
 		if (!doesSessionExist(sessionId)) return null;

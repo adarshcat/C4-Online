@@ -4,7 +4,7 @@ class Connect4Session {
 	final static int WIDTH = 7;
 	final static int HEIGHT = 6;
 
-	final static long TOTAL_GAME_TIME = 1000 * 60 * 1 / 6; // 3 minutes in millis
+	final static long TOTAL_GAME_TIME = 1000 * 60 * 3; // 3 minutes in millis
 	
 	Player.type[][] board;
 	Player.type turn = Player.type.PLAYER1;
@@ -14,6 +14,8 @@ class Connect4Session {
 
 	private long player1LastClockStart = 0;
 	private long player2LastClockStart = 0;
+
+	enum game_state{P1_WIN, P2_WIN, DRAW, NONE};
 	
 	Connect4Session(){
 		clearBoard();
@@ -21,9 +23,9 @@ class Connect4Session {
 		player1LastClockStart = System.currentTimeMillis();
 		player2LastClockStart = System.currentTimeMillis();
 	}
-	
-	boolean playPosition(int column, Player.type playingPlayer) {
-		if (column < 0 || column >= WIDTH || playingPlayer == Player.type.NONE || playingPlayer != turn) return false;
+
+	game_state playPosition(int column, Player.type playingPlayer) {
+		if (column < 0 || column >= WIDTH || playingPlayer == Player.type.NONE || playingPlayer != turn) return game_state.NONE;
 		boolean played = false;
 		
 		for (int j=HEIGHT-1; j>=0; j--) {
@@ -34,8 +36,23 @@ class Connect4Session {
 				break;
 			}
 		}
+
+		Player.type winningPlayer = checkWin();
+		if (winningPlayer != Player.type.NONE){
+			if (winningPlayer == Player.type.PLAYER1){
+				System.out.println("Player 1 won!");
+				return game_state.P1_WIN;
+			}
+			else if (winningPlayer == Player.type.PLAYER2){
+				System.out.println("Player 2 won!");
+				return game_state.P2_WIN;
+			}
+		}
+
+		boolean isFilled = isFilled();
+		if (isFilled) return game_state.DRAW;
 		
-		return played;
+		return game_state.NONE;
 	}
 	
 	void switchTurn() {
@@ -74,5 +91,89 @@ class Connect4Session {
 		}
 
 		return 0;
+	}
+
+	boolean isFilled(){
+		for (int i=0; i<WIDTH; i++) {
+			for (int j=0; j<HEIGHT; j++) {
+				if (board[i][j] == Player.type.NONE) return false;
+			}
+		}
+
+		return true;
+	}
+
+	Player.type checkWin(){
+		for (int i=0; i<board.length; i++){
+			for (int j=0; j<board[i].length; j++){
+				// continue to next iteration if the current place is empty
+				if (board[i][j] == Player.type.NONE) continue;
+
+				// check if there are 4 spaces to the right
+				if (i <= board.length - 4){
+					// check if the 4 places to the right contain the same player pieces
+					Player.type currentPiece = board[i][j];
+					boolean matching = true;
+					for (int k=i; k<i+4; k++){
+						if (currentPiece != board[k][j]){
+							matching = false;
+							break;
+						}
+					}
+
+					if (matching) return currentPiece;
+				}
+
+
+				// check if there are 4 spaces to the bottom
+				if (j <= board[i].length - 4){
+					// check if the 4 places to the bottom contain the same player pieces
+					Player.type currentPiece = board[i][j];
+					boolean matching = true;
+					for (int k=j; k<j+4; k++){
+						if (currentPiece != board[i][k]){
+							matching = false;
+							break;
+						}
+					}
+
+					if (matching) return currentPiece;
+				}
+
+
+				// check if there are 4 spaces to the bottom right
+				if (i <= board.length - 4 && j <= board[i].length - 4){
+					// check if the 4 places to the bottom right contain the same player pieces
+					Player.type currentPiece = board[i][j];
+					boolean matching = true;
+					for (int k=0; k<4; k++){
+						if (currentPiece != board[i+k][j+k]){
+							matching = false;
+							break;
+						}
+					}
+
+					if (matching) return currentPiece;
+				}
+
+
+				// check if there are 4 spaces to the bottom left
+				if (i >= 3 && j <= board[i].length - 4){
+					// check if the 4 places to the bottom left contain the same player pieces
+					Player.type currentPiece = board[i][j];
+					boolean matching = true;
+					for (int k=0; k<4; k++){
+						if (currentPiece != board[i-k][j+k]){
+							matching = false;
+							break;
+						}
+					}
+
+					if (matching) return currentPiece;
+				}
+			}
+		}
+
+		return Player.type.NONE;
 	}
 }

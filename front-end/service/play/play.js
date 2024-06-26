@@ -134,19 +134,7 @@ function millisToClockDisplay(millis){
 }
 
 async function matchStarted(otherPlayer){
-    let myName = document.getElementById("myName");
-    let myRating = document.getElementById("myRating");
-
-    let opponentName = document.getElementById("opponentName");
-    let opponentRating = document.getElementById("opponentRating");
-
-    let myData = await fetchMyInfo();
-
-    myName.innerText = myData[0];
-    myRating.innerText = "(" + myData[1] + ")";
-
-    opponentName.innerText = otherPlayer["username"];
-    opponentRating.innerText = "(" + otherPlayer["rating"] + ")";
+    updatePlayerCards(otherPlayer);
 
     let matchmakingLoader = document.getElementById("matchmakingLoader");
     let resignBtn = document.getElementById("resignBtn");
@@ -201,7 +189,40 @@ function gameTerminated(param){
     if (ratingChange < 0) sign = "-";
     else if (ratingChange > 0) sign = "+";
 
-    ratingText.innerText = "Rating: " + sign + abs(param["ratingChange"]);
+    ratingText.innerText = "Rating: " + sign + abs(ratingChange);
+
+    changePlayerRating(abs(ratingChange), sign);
+}
+
+// functions for updating the player card
+async function updatePlayerCards(opponentData){
+    let myName = document.getElementById("myName");
+    let myRating = document.getElementById("myRating");
+
+    let opponentName = document.getElementById("opponentName");
+    let opponentRating = document.getElementById("opponentRating");
+
+    let playerData = await fetchMyInfo();
+
+    myName.innerText = playerData[0];
+    myRating.innerText = "(" + playerData[1] + ")";
+
+    opponentName.innerText = opponentData["username"];
+    opponentRating.innerText = "(" + opponentData["rating"] + ")";
+}
+
+function changePlayerRating(ratingChange, sign){
+    let myRating = document.getElementById("myRating");
+    let opponentRating = document.getElementById("opponentRating");
+
+    let oppSign = (sign == "-")?" + ":" - ";
+    sign = " "+sign+" ";
+
+    let myString = myRating.innerText.substring(1, myRating.innerText.length-1) + sign + ratingChange;
+    let opponentString = opponentRating.innerText.substring(1, opponentRating.innerText.length-1) + oppSign + ratingChange;
+
+    myRating.innerText = "(" + myString + ")";
+    opponentRating.innerText = "(" + opponentString + ")";
 }
 
 // functions for sending message over to the server

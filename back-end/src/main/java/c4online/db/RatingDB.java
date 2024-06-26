@@ -16,6 +16,25 @@ public class RatingDB {
         conn = _conn;
     }
 
+    public boolean updateRating(int userId, int ratingChange) {
+        String sign = (ratingChange < 0)?"-":"+";
+        try {
+            String sqlQuery = "UPDATE "+ratingsTable+" SET rating = rating "+sign+" ? WHERE user_id = ?";
+
+            PreparedStatement stmt = conn.prepareStatement(sqlQuery);
+            stmt.setInt(1, Math.abs(ratingChange));
+            stmt.setInt(2, userId);
+
+            int rowUpdated = stmt.executeUpdate();
+
+            if (rowUpdated != 0) return true;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean populateUserDataById(int userId, User user) {
         boolean populated = false;
 
