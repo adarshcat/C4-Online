@@ -3,17 +3,33 @@
     <head>
         <title>C4 Home</title>
 
+        <!-- Google Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+        <!-- CSS Reset -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+
+        <!-- Milligram CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+
+        <link rel="stylesheet" type="text/css" rel="noopener" target="_blank" href="/front-end/style/home.css">
+
         <!-- Main Script-->
         <script src="/front-end/service/home/home.js"></script>
     </head>
 
     <body>
-        <h1>Home!</h1>
-        <h2 id="welcomeTxt"></h2>
-        <div>
-            <button class="authButton" onclick="location.href = '/login'">Login</button>
-            <button class="authButton" onclick="location.href = '/register'">Register</button>
+        <div class="foreground">
+            <img class="logo" id="logoRed" src = "/front-end/assets/logo/logo.svg" alt="Logo :)"/>
+            <div id="authButtons">
+                <button class="authButton" onclick="location.href = '/login'">Login</button>
+                <button class="authButton" onclick="location.href = '/register'">Register</button>
+            </div>
+            <div id="userInfo" class="userPanel">
+                <h2 id="welcomeTxt"></h2>
+                <button class="authButton" onclick="location.href = '/logout'">Logout</button>
+            </div>
+            <button onclick="location.href = '/play'">Play</button>
         </div>
-        <button onclick="location.href = '/play'">Play</button>
     </body>
 </html>

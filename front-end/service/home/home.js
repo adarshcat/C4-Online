@@ -8,14 +8,14 @@ async function displayWelcomeText(){
         document.getElementById("welcomeTxt").textContent = `Welcome ${jsonData["username"]}!`
 
         // hide the login/register button since already logged in
-        let authBtnCollection = document.getElementsByClassName("authButton")
-        
-        for (let i=0; i<authBtnCollection.length; i++){
-            authBtnCollection[i].hidden = true;
-        }
+        let authDiv = document.getElementById("authButtons")
+        authDiv.style.display = "none";
     } catch(e){
         // if not logged in, display another text
         document.getElementById("welcomeTxt").textContent = `Welcome to Connect 4 online! Consider creating an account or logging in`
+
+        let userInfo = document.getElementById("userInfo");
+        userInfo.style.display = "none";
     }
 }
 

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import c4online.sessions.SessionManager;
 
-@SuppressWarnings("serial")
 public class WebPage extends HttpServlet{
 	static final String ROOT = "src/main/resources/front-end/";
 	final protected String htmlFilePath;
@@ -73,7 +72,7 @@ public class WebPage extends HttpServlet{
 		}
 	}
 	
-	private void fallbackOrError(HttpServletResponse resp) {
+	protected void fallbackOrError(HttpServletResponse resp) {
 		try {
 			if (invalidAuthFallback == null) {
 				resp.sendError(HttpServletResponse.SC_FORBIDDEN);

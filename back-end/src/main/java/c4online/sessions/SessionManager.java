@@ -15,13 +15,13 @@ public class SessionManager {
 		sessionMap = new ConcurrentHashMap<String, User>();
 		
 		// DEBUG - remove this block of code later
-			String debugSession = "0mY_V04azp3XSblAXN5sLsehqM4xMrVautHi_WqJKwI";
-			User debugUser = DatabaseManager.getUserDataById(1);
-			sessionMap.put(debugSession, debugUser);
-
-			String debugSession2 = "xpzlVLGERirG4ogooNTr8CSMI-Tuz8McvM79Seb6T5g";
-			User debugUser2 = DatabaseManager.getUserDataById(2);
-			sessionMap.put(debugSession2, debugUser2);
+//			String debugSession = "0mY_V04azp3XSblAXN5sLsehqM4xMrVautHi_WqJKwI";
+//			User debugUser = DatabaseManager.getUserDataById(1);
+//			sessionMap.put(debugSession, debugUser);
+//
+//			String debugSession2 = "xpzlVLGERirG4ogooNTr8CSMI-Tuz8McvM79Seb6T5g";
+//			User debugUser2 = DatabaseManager.getUserDataById(2);
+//			sessionMap.put(debugSession2, debugUser2);
 		// ----------------------------------------
 	}
 	
@@ -49,6 +49,11 @@ public class SessionManager {
 		
 		return somethingRemoved;
 	}
+
+	public static boolean deleteSessionBySessionId(String sessionId) {
+		return sessionMap.remove(sessionId) != null;
+	}
+
 
 	public static void updateSessionByUserId(int userId, User user) {
 		for (ConcurrentHashMap.Entry<String, User> pair : sessionMap.entrySet()) {

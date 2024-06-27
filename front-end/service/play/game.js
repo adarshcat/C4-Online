@@ -177,6 +177,9 @@ function mousePressed(){
 }
 
 function spawnPlaceParticles(x, y, color){
+    return;
+    // disable particles for now, not satisfied with how they look
+
     let particlePos = createVector(x*rad + rad/2, y*rad + rad/2);
 
     const totalParts = 8;

@@ -1,5 +1,6 @@
 package c4online.game;
 
+import c4online.db.DatabaseManager;
 import org.eclipse.jetty.websocket.api.Session;
 
 import c4online.websocket.WebSocketComm;
@@ -170,8 +171,18 @@ public class GameInstance {
 		int player1dr = ratingChange;
 		int player2dr = ratingChange;
 
-		if (winner == Player.type.PLAYER1) player2dr *= -1;
-		else if (winner == Player.type.PLAYER2) player1dr *= -1;
+		if (winner == Player.type.PLAYER1){
+			DatabaseManager.ratingdb.updateGamePlayed(player1.id, true, false);
+			DatabaseManager.ratingdb.updateGamePlayed(player2.id, false, false);
+
+			player2dr *= -1;
+		}
+		else if (winner == Player.type.PLAYER2){
+			DatabaseManager.ratingdb.updateGamePlayed(player1.id, false, false);
+			DatabaseManager.ratingdb.updateGamePlayed(player2.id, true, false);
+
+			player1dr *= -1;
+		}
 
 		// update the player's rating in the database
 		RatingManager.updateRatingInDB(player1dr, player2dr, player1.id, player2.id);
@@ -196,6 +207,9 @@ public class GameInstance {
 
 	private void terminateGameWithDraw(){
 		System.out.println("Game terminated: draw");
+
+		DatabaseManager.ratingdb.updateGamePlayed(player1.id, false, true);
+		DatabaseManager.ratingdb.updateGamePlayed(player2.id, false, true);
 
 		String packet = WebSocketComm.constructGameTermPacket("draw", "", 0);
 		broadcastMessage(packet);

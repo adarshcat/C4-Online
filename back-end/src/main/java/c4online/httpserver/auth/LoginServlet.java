@@ -13,7 +13,6 @@ import c4online.security.Security;
 import c4online.sessions.SessionManager;
 import c4online.sessions.User;
 
-@SuppressWarnings("serial")
 public class LoginServlet extends WebPage{
 
 	public LoginServlet(String _htmlFilePath) {

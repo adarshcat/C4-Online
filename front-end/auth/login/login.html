@@ -3,19 +3,30 @@
     <head>
         <title>C4 Login</title>
 
+        <!-- Google Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+        <!-- CSS Reset -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+
+        <!-- Milligram CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+
+        <link rel="stylesheet" type="text/css" rel="noopener" target="_blank" href="/front-end/style/auth.css">
+
         <!-- Main Script-->
         <script src="/front-end/auth/login/login.js"></script>
     </head>
 
     <body>
-        <h1>Login</h1>
-        <p id="message"></p>
+        <img class="logo" id="logoRed" src = "/front-end/assets/logo/logo.svg" alt="Logo :)"/>
         <form method="post">
+            <h1>Login</h1>
+            <p id="message"></p>
             Username/Email: <input type='text' name='usernameOrEmail' maxlength="100" required/><br/>
             Password: <input type='password' name='password' required/><br/>
             <input type='submit' value='Login'/>
+            <a href="/register" class="authLink">Register</a>
         </form>
-        <br/>
-        <a href="/register">Register</a>
     </body>
 </html>

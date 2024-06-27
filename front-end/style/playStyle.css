@@ -3,10 +3,6 @@
     --backgroundCol: hsl(0, 30%, 23%);
     --infoPanelCol: hsl(0, 30%, 28%);
     --btnCol: hsl(0, 100%, 65%);
-
-    --backgroundCol: hsl(240, 30%, 23%);
-    --infoPanelCol: hsl(240, 30%, 28%);
-    --btnCol: hsl(240, 100%, 65%);
 }
 
 body{

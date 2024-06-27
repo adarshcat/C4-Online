@@ -35,6 +35,30 @@ public class RatingDB {
         return false;
     }
 
+    public void updateGamePlayed(int userId, boolean won, boolean draw){
+        try {
+            String gamePlayedIncr = "UPDATE "+ratingsTable+" SET games_played = games_played + 1 WHERE user_id = ?";
+
+            PreparedStatement stmt = conn.prepareStatement(gamePlayedIncr);
+            stmt.setInt(1, userId);
+
+            stmt.executeUpdate();
+
+            if (!draw) {
+                String gameOutcome = won?"games_won":"games_lost";
+                String gameOutcomeIncr = "UPDATE " + ratingsTable + " SET "+gameOutcome+" = "+gameOutcome+" + 1 WHERE user_id = ?";
+
+                PreparedStatement stmt2 = conn.prepareStatement(gameOutcomeIncr);
+                stmt2.setInt(1, userId);
+
+                stmt2.executeUpdate();
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean populateUserDataById(int userId, User user) {
         boolean populated = false;
 
